@@ -17,18 +17,14 @@ ETC (parent):
 		
 		>atmLam	(atmospheric conditions at observation time) (Oana)
 		
-		>calcFlam	(calc the flux from an input mag/ return input spec on required wavelength grid)
+		>calcFlam	(calc the flux from an input mag/ return input spec on required wavelength grid) (Annie)
 		
-		>detLam	(info about the detector for a given instrument) (Annie)
-		
-		>getColA	(given an observatory and telescope, returns collecting area) (Annie)
-		
-		>instLam	(info about throughput of instrument) (Ali)
+		>instLam	(info about throughput of instrument and detector) (Ali)
 		
 		>instOverLam	(integrate count equation) (Kelly)
 		
 		>solveForExp	(get the S/N and exposure time)
 		
-		>telLam	(info about throughput of telescope)
+		>telLam	    (info about throughput of telescope, collecting area) (Farhan)
 		
 		>filtLam	(info about throughput of filter) (Matt)
