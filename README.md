@@ -17,7 +17,7 @@ ETC (parent):
 		
 		>atmLam	(atmospheric conditions at observation time) (Oana)
 		
-		>calcFlam	(calc the flux from an input mag/ return input spec on required wavelength grid) (Annie)
+		>calcPhotFlux	(calc the photon flux at lambda given a single line or mag/filter + SED/BB) (Annie)
 		
 		>instLam	(info about throughput of instrument and detector) (Ali)
 		
