@@ -25,7 +25,7 @@ ETC (parent):
 		
 		>instLam	(info about throughput of instrument)
 		
-		>instOverLam	(integrate count equation)
+		>intOverLam	(integrate count equation)
 		
 		>solveForExp	(get the S/N and exposure time)
 		
