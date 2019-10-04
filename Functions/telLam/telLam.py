@@ -16,6 +16,3 @@ def telLam(d_p,d_ob,R):
 	tp = (A_p - A_ob) * (R**3) #throughput = effective collecting area * R**3
 
 	return tp
-
-
-# print(telLam(3.5,0.3,0.97))
