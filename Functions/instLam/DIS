@@ -1,0 +1,96 @@
+
+
+############# DIS ##############
+
+Some info from:
+https://www.apo.nmsu.edu/arc35m/Instruments/DIS/#3p1
+Notes for quantum efficiency and detector throughput
+
+ARC 3.5m DIS
+Dual Imaging Spectrograph.
+
+4.36 arcmin FOV broadband filters.
+
+The spatial scale in the blue channel is 0.40"/pixel; in the red channel, it is 0.42"/pixel.
+
+In spectroscopic mode, the spatial scales are 0.40"/pixel and 0.42"/pixel in the red and blue channels, respectively.
+
+Working with Red or Blue? (Ask Jon)
+
+Both blue and red CCDs are 2048x1024 back illuminated devices made by E2V. The blue detector has the E2V broadband coating; the red detector is a deep-depletion device with their 90nm coating.
+
+The DIS blue detector is linear up until about 50,000 DN and the DIS red detector is linear up to about 30,000 DN.
+
+In the blue, we only have the single B1200 high resolution grating. In the red, we have both R1200 and R830; the R1200 has superior throughput at the shorter wavelength end of the red channel, while the R830 has superior throughput at the longer wavelength end, with a crossover somewhere around 7500 A.
+
+
+Reduction:
+In general, data reduction for DIS spectra is similar to that for other long slit spectra, with some of the following basic steps:
+
+1. Remove bias level using overscan region of chip (e.g. region (2055:2095,50:1000)).
+
+2. Bias frames can be combined to look for fixed pattern noise, but generally this is not seen, so it may not be necessary to subtract superbias frames.
+
+3. Wavelength calibration obtained via arc lamp observations. Note that there is significant line curvature.
+
+4. Flat fielding can be performed using quartz lamp observations. Because of the strong spectral dependence of the quartz lamp, especially in the blue, you may wish to remove the spectral intensity dependence before flat fielding, to preserve the ability to calculate noise directly from the counts on your flat-fielded exposures.
+
+Ask Jon about where to find actual data for the throughputs.
+
+
+############# ARCTIC ##############
+
+https://www.apo.nmsu.edu/arc35m/Instruments/ARCTIC/
+
+Detector:
+The following table summarizes some of the chip characteristics when using the default read and binning settings of medium and 2x2
+
+Number of rows	4096
+Number of columns	4096
+Pixel size	15 µ
+Gain	2.00 electrons/DN
+Readout noise	3.7 electrons
+Field of View	7.85 arcmin
+Platescale	0.228 "/pix, binned 2x2
+
+Readout time is 25 seconds in the default medium readout mode, through amplifier II. Through the same amplifier, fast readout time is 11 seconds.
+
+
+Detector Gain and Readout Noise:
+The gain has been measured to be 2.00 electrons/pixel, with a readout noise of 3.7 electrons in the medium readout mode.
+
+
+Instrument Sensitivity:
+The following table and plot show the CCD quantum efficiency, as measured by ITL.  Table derived from plot.
+
+Wavelength (nm)	    QE (%)	Notes
+350	                75	    measured
+400	                85	    measured
+500	                98	    measured
+550	                99	    measured
+600	                98	    measured
+700	                95	    measured
+800	                84	    measured
+900	                50	    measured
+1000        	    12	    measured
+
+Ask Jon about interpolating over these data.  What level of interpolation is necessary?
+
+
+############# AGILE ##############
+
+https://www.apo.nmsu.edu/arc35m/Instruments/AGILE/index.html
+
+Net wavelength transmission of Agile (Figure 3). Here is the data set: 
+https://www.apo.nmsu.edu/arc35m/Instruments/AGILE/Anjum/wav.dat
+
+We show the net wavelength transmission of Agile we derive after including the response of the individual components discussed above in Figure 3. We determine a peak detection efficiency of 55% at 560 nm and find that the efficiency is greater than 50% for the wavelength range 500– 730 nm. This wavelength response is only approximately correct and does not include the response of the quartz glass window in front of the CCD. Also mirror reflectivity degrades faster in the blue regime over time and our data is valid for fresh aluminium coatings. For both these reasons, the actual blue response of the instrument should be slightly less than the derived response we show in Figure 3.
+
+
+Ask Jon about the throughput measurements of AGILE.
+
+Wavelength Response: (https://www.apo.nmsu.edu/arc35m/Instruments/AGILE/Anjum/agile_char.pdf)
+
+For higher blue quantum efficiency, we have chosen a CCD with enhanced back-thinning process and a broad-band anti-reflection coating. This gives us >80% peak quantum efficiency in the range 4500–7500 A. Additionally, the CCD has an ultra-violet coating to enhance the wavelength efficiency of the region 2000–3700 A to 35% (see the dotted line in Figure 1). As Apache Point Observatory is located at an altitude of 2788m, we expect to detect at least some of the blue photons in the range of 3200–3700 A.
+
+
