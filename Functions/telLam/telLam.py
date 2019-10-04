@@ -7,6 +7,7 @@ def telLam(d_p,d_ob,R):
 	''' calculates telescope throughput given:
 	d_p = telescope primary diameter, cm
 	d_p = diameter of central obstruction, cm
+	R = reflectance of Aluminum
 	'''
 	
 	r_p = d_p/2
