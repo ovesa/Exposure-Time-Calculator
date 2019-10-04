@@ -1,3 +1,5 @@
+#this still needs some work, but it's nearly there
+
 def filtLAM(filt,**kwargs):
     import numpy as np
     '''filt: Input filter being used as a string. Currently supports Johnson-Cousins ('jc') UBVRI, 
