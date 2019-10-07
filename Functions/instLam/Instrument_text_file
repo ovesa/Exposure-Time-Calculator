@@ -13,7 +13,7 @@ The spatial scale in the blue channel is 0.40"/pixel; in the red channel, it is 
 
 In spectroscopic mode, the spatial scales are 0.40"/pixel and 0.42"/pixel in the red and blue channels, respectively.
 
-Working with Red or Blue? (Ask Jon)
+Working with Red or Blue? (Ask Jon): Both
 
 Both blue and red CCDs are 2048x1024 back illuminated devices made by E2V. The blue detector has the E2V broadband coating; the red detector is a deep-depletion device with their 90nm coating.
 
@@ -33,7 +33,7 @@ In general, data reduction for DIS spectra is similar to that for other long sli
 
 4. Flat fielding can be performed using quartz lamp observations. Because of the strong spectral dependence of the quartz lamp, especially in the blue, you may wish to remove the spectral intensity dependence before flat fielding, to preserve the ability to calculate noise directly from the counts on your flat-fielded exposures.
 
-Ask Jon about where to find actual data for the throughputs.
+
 
 
 ############# ARCTIC ##############
@@ -72,7 +72,7 @@ Wavelength (nm)	    QE (%)	Notes
 900	                50	    measured
 1000        	    12	    measured
 
-Ask Jon about interpolating over these data.  What level of interpolation is necessary?
+
 
 
 ############# AGILE ##############
@@ -84,8 +84,6 @@ https://www.apo.nmsu.edu/arc35m/Instruments/AGILE/Anjum/wav.dat
 
 We show the net wavelength transmission of Agile we derive after including the response of the individual components discussed above in Figure 3. We determine a peak detection efficiency of 55% at 560 nm and find that the efficiency is greater than 50% for the wavelength range 500– 730 nm. This wavelength response is only approximately correct and does not include the response of the quartz glass window in front of the CCD. Also mirror reflectivity degrades faster in the blue regime over time and our data is valid for fresh aluminium coatings. For both these reasons, the actual blue response of the instrument should be slightly less than the derived response we show in Figure 3.
 
-
-Ask Jon about the throughput measurements of AGILE.
 
 Wavelength Response: (https://www.apo.nmsu.edu/arc35m/Instruments/AGILE/Anjum/agile_char.pdf)
 
