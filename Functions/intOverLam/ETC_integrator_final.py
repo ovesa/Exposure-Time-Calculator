@@ -1,16 +1,22 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
-Created on Tue Oct  3 15:43:15 2017
+Created on Tue. Oct, 11 2019
 
 @author: kellysanderson
 ===============================================================================
 Simpson's Rule for Integration of the Count Equation:
     
-    Function that approximates the integral of a function
+    Function that approximates the integral of a the count equation
     Input:
-        function of x, a initial value in function range, b final value in function range, 
-        h increment length 
+        All inputs should be functions of lambda, 
+        lambda_vals: single value or array of lambda values as indicated by user input
+        phot_flux: source flux in units of photons per area per time
+        atm_e: single value of array of atm transmission values corresponding to user input wavelengths
+        tel_e: single value or array of telescope transmission values corresponding to user input wavlengths
+        filt_e: single value or array of filter transmission values corresponding to user input wavelengths
+        ints_e: single value or array of instruments transmission values corresponding to user input wavelengths
+        det_e: single value or array of detector transmission values corresponding to user input wavelengths
     Output:
         approximate integral of function 
 ===============================================================================
@@ -21,7 +27,7 @@ import math
 from astropy.table import Table, Column
 from scipy import integrate
 
-def GetSprime(lambda_vals, phot_flux, atm_e, tel_e, inst_e, filt_e, det_e):
+def GetSprime(lambda_vals, phot_flux, atm_e, tel_e, filt_e, inst_e, det_e):
     
     h = 6.62e-27 #planck's constant ergs s
     c = 2.99e10 #speed of light cm s^-1
