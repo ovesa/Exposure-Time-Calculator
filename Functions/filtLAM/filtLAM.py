@@ -29,6 +29,7 @@ def filtLAM(filt,wl):
     #interpolation function if a given wl is not defined in the text files
     interp = interpolate.interp1d(wavelength,transmission)
     
+    #if a single value is entered, put it in an array
     if type(wl) is float or type(wl) is int:
         wl = np.array([wl])
         
