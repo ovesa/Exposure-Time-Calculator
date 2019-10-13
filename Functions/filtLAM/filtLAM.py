@@ -1,22 +1,18 @@
-def filtLAM(filt,**kwargs):
-    '''input:
+def filtLAM(filt,wl):
+    '''Input:
     
-    filt: Input filter being used as a string. Currently supports Johnson-Cousins ('jc') UBVRI, 
-    Sloan Digital Sky Survey ('sdss') ugriz, and Mauna Kea Observatory JHK ('mko'). For example, 'sdss_g'.
+        filt: Input filter being used as a string. Currently supports Johnson-Cousins ('jc') UBVRI, 
+        Sloan Digital Sky Survey ('sdss') ugriz, and Mauna Kea Observatory JHK ('mko'). For example, 'jc_U', sdss_g',
+        or 'mko_J' would all be valid inputs.
+        
+        wl: Wavelength(s) of interest in microns. Can input a single value or an array.
     
-    kwargs: wl_1 = float and wl_2 = float (optional). Input a wavelength of interest or a range of wavelengths in microns 
-    to get the corresponding tranmission(s). If no range is input, will return entire filter transmission.
+    Output:
     
-    output:
-    
-    The transmission of the filter in decimal form. Depending on inputs will return the entire filter transmission,
-    the transmission in a range of wavelengths, or the transmission at a single wavelength.'''
+        The transmission of the filter as a percentage at the given wavelength(s)'''
     
     import numpy as np
-    
-    #extract the keyword arguments that define a wavelength range (if given)
-    wl_1 = kwargs.get('wl_1')
-    wl_2 = kwargs.get('wl_2')
+    from scipy import interpolate
     
     #read in the info for the selected filter. text files are two columns(wl, transmission) space delimited.
     f = open(filt+'.txt','r')
@@ -26,26 +22,39 @@ def filtLAM(filt,**kwargs):
     for i in lines:
         wavelength = np.append(wavelength,float(i.split(' ')[0]))
         transmission = np.append(transmission,float(i.split(' ')[1]))
+        
+    ll = min(wavelength) #lower limit of wavelength for this filter
+    ul = max(wavelength) #upper limit of wavelength for this filter
     
-    #return the transmission in the given wl range (if given)
-    if wl_1 and wl_2:
-        print('Your selected wavelength range is ' + str(wl_1)+ 'um to '+str(wl_2)+'um')
-        transmission_rng = transmission[np.argwhere(wavelength==wl_1)[0][0]:np.argwhere(wavelength==wl_2)[0][0]]
-        return transmission_rng
+    #interpolation function if a given wl is not defined in the text files
+    interp = interpolate.interp1d(wavelength,transmission)
     
-    #return the transmission at wl_1
-    elif wl_1 and not wl_2:
-        print('Your selected wavelength is ' + str(wl_1)+ 'um')
-        transmission_val = transmission[np.argwhere(wavelength==wl_1)]
-        return transmission_val[0][0]
-    
-    #not needed? return the transmission at wl_2
-    elif wl_2 and not wl_1:
-        print('Your selected wavelength is ' + str(wl_2)+ 'um')
-        transmission_val = transmission[np.argwhere(wavelength==wl_2)]
-        return transmission_val[0][0]
-    
-    #if no range given or if wl given does not fall within filter, return entire transmission 
+    #if a single value is entered, put it in an array
+    if type(wl) is float or type(wl) is int:
+        wl = np.array([wl])
+        
+    #check that entered wavelengths fall within filter range
+    if wl.any() < ll and wl.any() > ul:
+            print('Error: one of your entered wavelengths is outside of the filter range.')
+            print('Transmission data for '+ filt + ' exists from ' + str(ll) + 'um to ' + str(ul)+'um')
+            
+    #if all wavelengths check out ok, continue to transmission extraction
     else:
-        print('Wavelength not in range of selected filter or no wavelength(s) selected. Returning full transmission.')
-        return transmission
+        print('Your selected wavelength range is ' + str(min(wl))+ 'um to '+str(max(wl))+'um')
+        
+        trans_vals = np.array([]) #empty array for transmission values to be returned
+        
+        #loop through entered wavelengths
+        for i in np.arange(0,len(wl)):
+            
+            #check if entered wavelengths are an exact match to those already in the transmission files
+            try:
+                tv = transmission[np.argwhere(wavelength==wl[i])]
+                trans_vals = np.append(trans_vals,tv[0][0])
+            
+            #if they are not an exact match, use the interpolation function to estimate a transmission at that wavelength
+            except(IndexError):
+                #print(str(wl[i]) + ' is not explicitly defined in the filter curve. Using interpolation.')
+                new_trans = interp(wl[i]) #plug in to interpolation function
+                trans_vals = np.append(trans_vals,new_trans)
+        return trans_vals
