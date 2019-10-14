@@ -16,17 +16,17 @@ AGILE TRANSMISSION: DOES NOT REQUIRE ANY TELESCOPE OR CCD CORRECTION
 Just return the value from getAGILE() given some wavelength.
 '''
 
-def getAGILE(string_name_text_file):
+def getAGILE(lamda_inp, string_name_text_file):
 
     # Load AGILE data: Contains telescope torrection so this is all that needs to be done for AGILE other than
     # interpolation for a finer grid.
 
     Agile_wave, Agile_transmission = np.loadtxt('Efficiencies/'+string_name_text_file, unpack=True, usecols=[0,1])
-    Agile_auxilary = scipy.interpolate.interp1d(Agile_wave, Agile_transmission, fill_value='extrapolate') # interpolating array for Agile
+    
+    nm_to_angs = 10.0
+    Agile_auxilary = scipy.interpolate.interp1d(Agile_wave * nm_to_angs, Agile_transmission, fill_value='extrapolate') # interpolating array for Agile
 
-    Agile_wave_High_Res = np.arange(320., 1001., 1.0) # 320nm - 1000nm array with 1nm resolution
-    Agile_transmission_High_Res = Agile_auxilary(Agile_wave_High_Res) # Transmission at every nanometer
-    return Agile_transmission_High_Res
+    return Agile_auxilary(lamda_inp)
 
 '''
 NICFPS
@@ -44,16 +44,16 @@ The detector as tested by Rockwell demonstrates a mean quantum efficiency (QE) o
 H-band QE is approximately mid-way between these values on the typical H1RG.)
 '''
 
-def getNICFPS(string_name_text_file):
+def getNICFPS(lamda_inp, string_name_text_file):
     
     # Load NICFPS data (in microns, um)
 
     Nicfps_wave, Nicfps_transmission = np.loadtxt('Efficiencies/'+string_name_text_file, unpack=True, usecols=[0,1])
-    Nicfps_auxilary = scipy.interpolate.interp1d(Nicfps_wave, Nicfps_transmission, fill_value='extrapolate') # interpolating array for Agile
+    
+    micron_to_angs = 10**4.0
+    Nicfps_auxilary = scipy.interpolate.interp1d(Nicfps_wave * micron_to_angs, Nicfps_transmission, fill_value='extrapolate') # interpolating array for Agile
 
-    Nicfps_wave_High_Res = np.arange(0.8, 2.601, 0.001) # 0.8 um - 2.6 um in 10nm steps (0.001 um)
-    Nicfps_transmission_High_Res = Nicfps_auxilary(Nicfps_wave_High_Res) # Transmission at every nanometer
-    return Nicfps_transmission_High_Res
+    return Nicfps_auxilary(lamda_inp) * 0.01
 
 
 
@@ -65,16 +65,16 @@ Telescope correction must be performed on ARCTIC.
 Digitized using: https://automeris.io/WebPlotDigitizer/
 '''
 
-def getARCTIC(string_name_text_file):
+def getARCTIC(lamda_inp, string_name_text_file):
 
     # Load ARCTIC data (in nm)
 
     Arctic_wave, Arctic_transmission = np.loadtxt('Efficiencies/'+string_name_text_file, unpack=True, usecols=[0,1])
-    Arctic_auxilary = scipy.interpolate.interp1d(Arctic_wave, Arctic_transmission, fill_value='extrapolate') # interpolating array for Agile
 
-    Arctic_wave_High_Res = np.arange(300., 1005., 5.0) # 320nm - 1000nm array with 1nm resolution
-    Arctic_transmission_High_Res = Arctic_auxilary(Arctic_wave_High_Res) * 0.01 # %Transmission to decimal.
-    return Arctic_transmission_High_Res
+    nm_to_angs = 10.0
+    Arctic_auxilary = scipy.interpolate.interp1d(Arctic_wave * nm_to_angs, Arctic_transmission, fill_value='extrapolate')
+
+    return Arctic_auxilary(lamda_inp) * 0.01 # %Transmission to decimal.
 
 
 '''
@@ -93,16 +93,16 @@ We also do not know the throughput of the grating
 
 '''
 
-def getARCES(string_name_text_file):
+def getARCES(lamda_inp, string_name_text_file):
 
     # Load ARCES data (in nm)
 
     Arces_wave, Arces_transmission = np.loadtxt('Efficiencies/'+string_name_text_file, unpack=True, usecols=[0,1])
-    Arces_auxilary = scipy.interpolate.interp1d(Arces_wave, Arces_transmission, fill_value='extrapolate') # interpolating array for Agile
+    
+    nm_to_angs = 10.0
+    Arces_auxilary = scipy.interpolate.interp1d(Arces_wave * nm_to_angs, Arces_transmission, fill_value='extrapolate') # interpolating array for Agile
 
-    Arces_wave_High_Res = np.arange(350., 1080., 5.0) # 350nm - 1080nm array with 5nm resolution
-    Arces_transmission_High_Res = Arces_auxilary(Arces_wave_High_Res) * 0.01 # %QE to decimal
-    return Arces_transmission_High_Res
+    return Arces_auxilary(lamda_inp) * 0.01 # %QE to decimal
 
 
 '''
@@ -117,22 +117,28 @@ Options: 5 gratings, 2 CCD's (red and blue)
 
 '''
 
-def getDIS(string_name_text_file):
+def getDIS(lamda_inp, string_name_text_file):
 
     # load DIS diffraction throughput:
 
     Dis_wave, Dis_transmission = np.loadtxt('Efficiencies/'+string_name_text_file, unpack=True, usecols=[0,1])
-    Dis_wave = Dis_wave / 10.0
+
     Dis_wave_blue_CCD, Dis_blue_CCD = np.loadtxt('Efficiencies/DIS_blue_Marconi-CCD42-20-0-310.txt', unpack=True, usecols=[0,1])
     Dis_wave_red_CCD, Dis_red_CCD = np.loadtxt('Efficiencies/DIS_red_E2V-CCD42-20-1-D21.txt', unpack=True, usecols=[0,1])
-    Dis_blue_CCD = 0.01 * Dis_blue_CCD # from %QE to decimal
     
-    Dis_auxilary = scipy.interpolate.interp1d(Dis_wave, Dis_transmission, fill_value='extrapolate') # interpolating array for Agile
+    # only red_CCD is ion decimals so convert back to % and convert back the total for output
+    Dis_red_CCD = 100.0 * Dis_red_CCD # to %QE
 
-    Dis_wave_High_Res = np.arange(300., 996.3, 5.0) # 350nm - 1080nm array with 5nm resolution
-    Dis_transmission_High_Res = Dis_auxilary(Dis_wave_High_Res) * 0.01 # %QE to decimal
-    # return Dis_transmission_High_Res, Dis_wave_blue_CCD, Dis_blue_CCD, Dis_wave_red_CCD, Dis_red_CCD
-    return Dis_wave_blue_CCD, Dis_blue_CCD, Dis_wave_red_CCD, Dis_red_CCD
+    
+    Dis_auxilary = scipy.interpolate.interp1d(Dis_wave, Dis_transmission, fill_value='extrapolate')
+
+    nm_to_angs = 10.0
+
+    Dis_blue_CCD_auxilary = scipy.interpolate.interp1d(Dis_wave_blue_CCD * nm_to_angs, Dis_blue_CCD, fill_value='extrapolate')
+    Dis_red_CCD_auxilary = scipy.interpolate.interp1d(Dis_wave_red_CCD * nm_to_angs, Dis_red_CCD, fill_value='extrapolate')
+
+    # the 1e-06 factor is due to (1/100)^3 since all 3 terms are in %
+    return Dis_auxilary(lamda_inp) * Dis_blue_CCD_auxilary(lamda_inp) * Dis_red_CCD_auxilary(lamda_inp) * 1e-06
 
 
 
@@ -150,61 +156,52 @@ Everything else: ...everything else! (detector, optics, etc.)
 
 '''
 
-def getTSPEC(string_name_text_file):
+def getTSPEC(lamda_inp, string_name_text_file):
 
     # load TSPEC data:
 
     Tspec_wave_grat, Tspec_transmission_grat = np.loadtxt('tspec_stuff/'+string_name_text_file, unpack=True, usecols=[0,1])
     Tspec_wave_other, Tspec_transmission_other = np.loadtxt('tspec_stuff/tspec_everythingelse.txt', unpack=True, usecols=[0,1])
 
+    micron_to_angs = 10**4.0
 
-    return Tspec_wave_grat, Tspec_transmission_grat, Tspec_wave_other, Tspec_transmission_other
+    Tspec_aux_grat = scipy.interpolate.interp1d(Tspec_wave_grat * micron_to_angs, Tspec_transmission_grat, fill_value='extrapolate')
+    Tspec_aux_other = scipy.interpolate.interp1d(Tspec_wave_other * micron_to_angs, Tspec_transmission_other, fill_value='extrapolate')
+
+    return Tspec_aux_grat(lamda_inp) * Tspec_aux_other(lamda_inp)
 
 
 
 instruments = ['AGILE', 'NICFPS', 'ARCTIC', 'T-SPEC', 'DIS', 'ARCES']
 user_input = input('Enter Instrument From List: [AGILE, NICFPS, ARCTIC, T-SPEC, DIS, ARCES]: ')
+lamda_inp = input('Enter wavelength (angstrom): ')
+lamda_inp = float(lamda_inp)
 
 if user_input == instruments[0]:
-    output = getAGILE('AGILE.txt')
+    output = getAGILE(lamda_inp, 'AGILE.txt')
+    print(output)
 
 elif user_input == instruments[1]:
-    output = getAGILE('NICFPS_Hawaii_QE.txt')
+    output = getNICFPS(lamda_inp, 'NICFPS_Hawaii_QE.txt')
+    print(output)
 
 elif user_input == instruments[2]:
-    output = getAGILE('ARCTIC_CCD_QE.txt')
+    output = getARCTIC(lamda_inp, 'ARCTIC_CCD_QE.txt')
+    print(output)
 
 elif user_input == instruments[3]:
-    wave_grat, tran_grat, wave_other, trans_other = getTSPEC('tspec_grating_throughput.txt')
-    plt.plot(wave_grat, tran_grat, 'g')
-    plt.plot(wave_other, trans_other, 'r')
-    plt.show()
-    print('T-SPEC still under development')
+    output = getTSPEC(lamda_inp, 'tspec_grating_throughput.txt')
+    print(output)
 
 elif user_input == instruments[4]:
-    # input_DIS_blue = input('Enter DIS Blue channel from list: [B400, B1200_BH]: ')
-    # input_DIS_red = input('')
-    # print('DIS under development')
-    # op1, op2, op3, op4, op5 = getDIS('DIS_B400.txt')
-    op2, op3, op4, op5 = getDIS('DIS_B400.txt')
-    print('DIS still under development')
-    # plt.plot(np.arange(300., 996.3, 5.0), op1, 'g:')
-    plt.plot(op2, op3, 'b')
-    plt.plot(op4, op5, 'r')
-    plt.show()
+    output = getDIS(lamda_inp, 'DIS_B400.txt')
+    print(output)
     
 
 elif user_input == instruments[5]:
-    output = getARCES('ARCES.txt')
+    output = getARCES(lamda_inp, 'ARCES.txt')
+    print(output)
 
 else:
     print('\nPlease adhere to the given format and choose from the list (no quotes):')
     print(instruments)
-
-
-# Arces_wave, Arces_transmission = np.loadtxt('ARCES.txt', unpack=True, usecols=[0,1])
-
-# plt.plot(np.arange(350., 1080., 5.0), output, 'b')
-# plt.plot(Arces_wave, Arces_transmission*0.01, 'r:')
-
-# plt.show()
