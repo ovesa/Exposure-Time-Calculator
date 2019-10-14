@@ -30,7 +30,7 @@ def filtLAM(filt,wl):
     interp = interpolate.interp1d(wavelength,transmission)
     
     #if a single value is entered, put it in an array
-    if type(wl) is float or type(wl) is int:
+    if type(wl) is float or type(wl) is int or type(wl) is list:
         wl = np.array([wl])
         
     #check that entered wavelengths fall within filter range
