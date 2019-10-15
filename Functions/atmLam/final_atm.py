@@ -135,6 +135,6 @@ def total_background_flux(moon_phase,X,wav):
     sky = load_flux(moon_phase)
     airmass_value,airmass_index = air_mass_value(X,moon_phase)
     bg_photon_flux = cal_bg_photon(wav,airmass_value,airmass_index,moon_phase)[0]
-    return bg_photon_flux
+    return bg_photon_flux * wav
 
 
