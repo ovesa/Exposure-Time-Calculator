@@ -2,8 +2,6 @@
 # coding: utf-8
 
 
-
-# import neccessary modules
 import numpy as np
 import matplotlib.pyplot as plt
 from astropy.io import fits
@@ -41,7 +39,7 @@ def load_flux(moon_phase):
 
 
 
-def air_mass_value(X,moon_phase):
+def air_mass(X,moon_phase):
     '''This function returns the flux array and its associated index in the .npz file
     that best corresponds closely to the chosen airmass. The flux arrays chosen depend 
     on the sky spectrum downloaded from the ESO sky calculator. Downloaded sky spectrums were
@@ -79,7 +77,7 @@ def air_mass_value(X,moon_phase):
 
 
 
-def cal_bg_photon(wav,X,index,moon_phase):
+def cal_bg_photon(wav,X,airmass_index,moon_phase):
     '''This function calculates the final background photon flux for a given wavelength, moon phase, and 
     airmass. This function is referenced in the total_background_flux function. 
     
@@ -97,24 +95,25 @@ def cal_bg_photon(wav,X,index,moon_phase):
     
     # loads in the load_flux function
     sky = load_flux(moon_phase)
-     
+    
+    
     # raises an error if the inputted wavelength is not within the range of 300 nm to 1200 nm
     # each wavelength array is the same; so, it doesn't matter which one is called
-    if wav < min(sky['wav_X_1']) or wav > max(sky['wav_X_1']):
-        raise Exception('Chosen wavelength out of range (300 - 1200 nm). The wavelength entered was: {} nm'.format(wav))
+    # changing it to microns which is what the user input is
+    if wav < min(sky['wav_X_1']*0.001) or wav > max(sky['wav_X_1']*0.001):
+        raise Exception('Chosen wavelength out of range (0.3 - 2.5 microns). The wavelength entered was: {} µm'.format(wav))
     else:
         # each wavelength array is the same; so, it doesn't matter which one is called
         # only the flux changes at different airmasses
         # interpolates the wavelength vs the fluxes of the different airmasses
         # the array names correpsond to the airmass associated with them
-        interp_flux = interpolate.interp1d(sky['wav_X_1'],[sky['flux_X_1'],sky['flux_X_1_5'],sky['flux_X_2'],sky['flux_X_2_5'],sky['flux_X_3']])
+        interp_flux = interpolate.interp1d(sky['wav_X_1']*0.001,[sky['flux_X_1'],sky['flux_X_1_5'],sky['flux_X_2'],sky['flux_X_2_5'],sky['flux_X_3']])
         # this gives the flux at that chosen wavelength for a particular airmass
         bg_photon_flux = interp_flux(wav)[airmass_index]
             
        
         
     return bg_photon_flux
-
 
 
 
@@ -128,14 +127,17 @@ def total_background_flux(moon_phase,X,wav):
     wav = wavelength (nm)
     
     Output:
-    bg_photon_flux = the final background photon flux (ph/s/m^2/micron/arcsec^2)
+    bg_photon_flux = the final background photon flux (ph/s/m^2/arcsec^2)
     '''
     
     
     sky = load_flux(moon_phase)
-    airmass_value,airmass_index = air_mass_value(X,moon_phase)
+    airmass_value,airmass_index = air_mass(X,moon_phase)
     bg_photon_flux = cal_bg_photon(wav,airmass_value,airmass_index,moon_phase)[0]
-    wav = wav*0.001
-    return bg_photon_flux*wav
+    return bg_photon_flux*wav # (ph/s/m^2/arcsec^2)
+
+
+
+
 
 
