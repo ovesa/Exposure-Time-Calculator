@@ -41,7 +41,7 @@ def load_flux(moon_phase):
 
 
 
-def air_mass_to_flux(X,moon_phase):
+def air_mass_value(X,moon_phase):
     '''This function returns the flux array and its associated index in the .npz file
     that best corresponds closely to the chosen airmass. The flux arrays chosen depend 
     on the sky spectrum downloaded from the ESO sky calculator. Downloaded sky spectrums were
@@ -133,7 +133,7 @@ def total_background_flux(moon_phase,X,wav):
     
     
     sky = load_flux(moon_phase)
-    airmass_value,airmass_index = air_mass_to_flux(X,moon_phase)
+    airmass_value,airmass_index = air_mass_value(X,moon_phase)
     bg_photon_flux = cal_bg_photon(wav,airmass_value,airmass_index,moon_phase)[0]
     return bg_photon_flux
 
