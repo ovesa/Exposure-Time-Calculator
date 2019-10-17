@@ -34,7 +34,7 @@ def filtLAM(filt,wl):
         wl = np.array([wl])
         
     #check that entered wavelengths fall within filter range
-    if wl.any() < ll and wl.any() > ul:
+    if wl.any() < ll or wl.any() > ul:
             print('Error: one of your entered wavelengths is outside of the filter range.')
             print('Transmission data for '+ filt + ' exists from ' + str(ll) + 'um to ' + str(ul)+'um')
             
