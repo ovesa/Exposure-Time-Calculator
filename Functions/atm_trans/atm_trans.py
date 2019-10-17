@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 def atm_trans(wl,airmass, path):
+=======
+def atm_trans(wl,airmass,path):
+>>>>>>> 96a8814427880d22a6393279d323a01465a4cd3b
     import numpy as np
     from astropy.io import fits
     from scipy import interpolate
