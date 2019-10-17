@@ -1,4 +1,4 @@
-def atm_trans(wl,airmass):
+def atm_trans(wl,airmass, path):
     import numpy as np
     from astropy.io import fits
     from scipy import interpolate
@@ -16,7 +16,7 @@ def atm_trans(wl,airmass):
     lam = []
     interp = []
     for i in am_on_file:
-        skytable = fits.open('skytable_0_'+str(i)+'.fits') #open skytable fits file
+        skytable = fits.open(path+'skytable_0_'+str(i)+'.fits') #open skytable fits file
         hdu = skytable[1].data #extract data
         trans.append(hdu['trans_ma']) #extract atmospheric transmission
         lam.append(hdu['lam']) #extract wavelength
@@ -31,7 +31,7 @@ def atm_trans(wl,airmass):
     
     trans_at_wl = [] #transmission at entered wavelength(s)
     for i in interp:
-        trans_at_wl.append(i(wl_nm)) #might need to add [0]? weird for single value vs loops. Right now works for loops.
+        trans_at_wl.append(i(wl_nm)[0]) #might need to add [0]? weird for single value vs loops. Right now works for loops.
     
     #print(trans_at_wl)
     

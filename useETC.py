@@ -24,7 +24,9 @@ from Functions.intOverLam.ETC_integrator_final import GetSprime #  (lambda_vals,
 
 from Functions.filtLAM.filtLAM import filtLAM # (filt,wl)
 
-from Functions.atmLam.final_atm import total_background_flux
+from Functions.atmLam.final_atm import total_background_flux # (moonphase, airmass, wavelength)
+
+from Functions.atm_trans.atm_trans import atm_trans # (wavelength, airmass, path)
 
 
 # instLam can now be fully called!
@@ -32,11 +34,14 @@ from Functions.atmLam.final_atm import total_background_flux
 # solve_expT can be used!
 # intOverLam can be used but needs completion
 # all filters can now be used along with the instruments
-# moonphases work with a little tweak
+# moonphases now works!
 
 instrument_path = 'Functions/instLam/Efficiencies/'
 filter_path = 'Functions/filtLam/'
 moonphase_path = 'Functions/atmLam/'
+atmos_transmission_path = 'Functions/atm_trans/'
+
+# print(atm_trans(0.55, 1.2))  THIS WILL WORK IS THE .FITS FILES GO IN AS INPUT STRINGS. TALK TO MATT.
 
 # EXAMPLES OF WORKING SHIT:
 # print(getAGILE(np.arange(0.5, 0.8, 0.01), instrument_path+'AGILE.txt'))
@@ -48,20 +53,16 @@ moonphase_path = 'Functions/atmLam/'
 # print(telLam(100.0,20.0,0.1)) 
 # print(calc_expT(100., 23.5, 2.4, 1., 10000.))
 # print(filtLAM(filter_path+'jc_V', np.arange(0.5, 0.8, 0.01)))
-'''
-print(total_background_flux(moonphase_path+'45', 1.2, 550.0))
-This does not work due to how loadflux(moonphase) is defined.  Maybe move all phase files to parent directory and
-avoid the hassle all together? It works when we do that!
+# print(atm_trans(0.5, 1.2, atmos_transmission_path))
 
-Another way: just remove 'skytables_' from the name of all the .npz files!
-'''
+# print(total_background_flux(moonphase_path+'45', 1.2, 0.55))
 
 
 # Main User Inputs:
 
 instrument_list = '[AGILE, NICFPS, ARCTIC, T-SPEC, DIS, ARCES]'
 filter_list = '[jc_U, jc_B, jc_V, jc_R, jc_I, mko_H, mko_J, mko_K, sdss_g, sdss_r, sdss_i, sdss_u, sdss_z]'
-moonphase_list = '[0, 45, 90, 135, 180, 225, 270, 315]'
+moonphase_list = '[NM, WxC, FQ, WxG, FM, WnG, TQ, WnC]'
 
 input_instrument = input('Instrument Options:\n'+instrument_list+'\nInstrument: ')
 if input_instrument == 'DIS':
@@ -74,7 +75,7 @@ input_filter = input('Filter Options:\n'+filter_list+'\nFilter: ')
 input_StoN = input('Please enter S/N: ')
 StoN = float(input_StoN)
 
-input_wave_range = input('Enter wavelength range as beginning,end,resolution (comma-separated): ')
+input_wave_range = input('Enter wavelength range as beginning,end,wave_step_size (comma-separated): ')
 input_wave_range = input_wave_range.split(',')
 input_wave_range = [float(input_wave_range[i]) for i in range(len(input_wave_range))]
 
@@ -88,6 +89,6 @@ wave_range = np.arange(input_wave_range[0], input_wave_range[1], input_wave_rang
 
 
 
-'''
-Now use the inputs to get parameters for final exposure time calculation
-'''
+# '''
+# Now use the inputs to get parameters for final exposure time calculation
+# '''
