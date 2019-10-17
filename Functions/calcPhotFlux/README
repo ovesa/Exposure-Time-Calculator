@@ -1,7 +1,6 @@
-
 Main Function: S = calcPhotFlux(mag_sys,band,mag)
 Inputs: magnitude system ("AB" or "Vega"),
-band ("AB"-"u","g","r","i","z"; "Vega"-"U","B","V","R","I","Z","J","H","K"), 
+band ("AB"-"u","g","r","i","z"; "Vega"-"U","B","V","R","I","J","H","K"), 
 and magnitude (e.g. 15)
 Outputs: S (Photon Flux) [photons/cm^2/s/um]
 
