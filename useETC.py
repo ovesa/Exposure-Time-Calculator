@@ -36,12 +36,13 @@ from Functions.atm_trans.atm_trans import atm_trans # (wavelength, airmass, path
 # all filters can now be used along with the instruments
 # moonphases now works!
 
+# some of the functions require files so these paths go to them!
 instrument_path = 'Functions/instLam/Efficiencies/'
 filter_path = 'Functions/filtLam/'
 moonphase_path = 'Functions/atmLam/'
 atmos_transmission_path = 'Functions/atm_trans/'
 
-# print(atm_trans(0.55, 1.2))  THIS WILL WORK IS THE .FITS FILES GO IN AS INPUT STRINGS. TALK TO MATT.
+# print(atm_trans(0.55, 1.2))
 
 # EXAMPLES OF WORKING SHIT:
 # print(getAGILE(np.arange(0.5, 0.8, 0.01), instrument_path+'AGILE.txt'))
@@ -63,6 +64,7 @@ atmos_transmission_path = 'Functions/atm_trans/'
 instrument_list = '[AGILE, NICFPS, ARCTIC, T-SPEC, DIS, ARCES]'
 filter_list = '[jc_U, jc_B, jc_V, jc_R, jc_I, mko_H, mko_J, mko_K, sdss_g, sdss_r, sdss_i, sdss_u, sdss_z]'
 moonphase_list = '[NM, WxC, FQ, WxG, FM, WnG, TQ, WnC]'
+photometric_system = '[AB, Vega]'
 
 input_instrument = input('Instrument Options:\n'+instrument_list+'\nInstrument: ')
 if input_instrument == 'DIS':
@@ -72,23 +74,70 @@ if input_instrument == 'DIS':
 
 input_filter = input('Filter Options:\n'+filter_list+'\nFilter: ')
 
+input_phot_sys = input('Photometric System Options: \n'+photometric_system+'\nSystem: ')
+
 input_StoN = input('Please enter S/N: ')
 StoN = float(input_StoN)
 
-input_wave_range = input('Enter wavelength range as beginning,end,wave_step_size (comma-separated): ')
-input_wave_range = input_wave_range.split(',')
-input_wave_range = [float(input_wave_range[i]) for i in range(len(input_wave_range))]
+# input_wave_range = input('Enter wavelength range as beginning,end,wave_step_size (comma-separated): ')
+# input_wave_range = input_wave_range.split(',')
+# input_wave_range = [float(input_wave_range[i]) for i in range(len(input_wave_range))]
+# HERE IS THE WAVELENGTH RANGE WE WILL USE:
+# wave_range = np.arange(input_wave_range[0], input_wave_range[1], input_wave_range[2])
+input_wave_range = input('Enter Wavelength (microns - deal with it): ')
+wavelength = float(input_wave_range)
+
 
 moonphase = input('Moon Phase Options:\n'+moonphase_list+'\nMoon Phase: ')
 
 input_airmass = input('Please enter airmass: ')
 airmass = float(input_airmass)
 
-# HERE IS THE WAVELENGTH RANGE WE WILL USE:
-wave_range = np.arange(input_wave_range[0], input_wave_range[1], input_wave_range[2])
+
+'''
+Now use the inputs to get parameters for final exposure time calculation.
+
+There are the parameter we have:
+
+input_instrument (string)
+input_channel (string)
+input_filter (string)
+input_phot_sys (string)
+StoN (float)
+wavelength (float)
+moonphase (string)
+airmass (float)
+
+'''
+
+#  MAIN CALLS WITH PARAMETERS:
+
+# get telescope area
+Tel_Collect_Area = telLam(340.0, 47.0, 0.97) # APO VALUES HARD CODED HERE... in cm^2
+
+# get efficiency of chosen instrument, at the given wavelenght:
+if input_instrument == 'AGILE':
+    inst_eff = getAGILE(wavelength, instrument_path+'AGILE.txt')
+elif input_instrument == 'NICFPS':
+    inst_eff = getNICFPS(wavelength, instrument_path+'NICFPS_Hawaii_QE.txt')
+elif input_instrument == 'ARCTIC':
+    inst_eff = getARCTIC(wavelength, instrument_path+'ARCTIC_CCD_QE.txt')
+elif input_instrument == 'T-SPEC':
+    inst_eff = getTSPEC(wavelength, instrument_path+'tspec_grating_throughput.txt', instrument_path+'tspec_everythingelse.txt')
+elif input_instrument == 'ARCES':
+    inst_eff = getARCES(wavelength, instrument_path+'ARCES.txt')
+elif input_instrument == 'DIS':
+    if input_channel == 'R':
+        inst_eff = getDIS(wavelength, instrument_path+'DIS_R300.txt', instrument_path+'DIS_red_E2V-CCD42-20-1-D21.txt')
+    elif input_channel == 'B':
+        inst_eff = getDIS(wavelength, instrument_path+'DIS_B400.txt', instrument_path+'DIS_blue_Marconi-CCD42-20-0-310.txt')
+else:
+    print('\nAdhere to options, please.\n')
 
 
+# filter efficiency
+filter_eff = filtLAM(input_filter, wavelength)
 
-# '''
-# Now use the inputs to get parameters for final exposure time calculation
-# '''
+# background flux
+back_flux = total_background_flux(moonphase_path+moonphase, airmass, wavelength)
+
