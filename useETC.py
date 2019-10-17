@@ -1,5 +1,4 @@
 
-
 import numpy as np
 import math
 from astropy.io import fits
@@ -74,9 +73,9 @@ bands_Vega = '[U,B,V,R,I,J,H,K]'
 input_phot_sys = input('Photometric System Options: \n'+photometric_system+'\nSystem: ')
 print(input_phot_sys)
 if input_phot_sys == 'AB':
-    input_phot_band = input_phot_sys = input('Photometric Band Options: \n'+bands_AB+'\nBand: ')
+    input_phot_band = input('Photometric Band Options: \n'+bands_AB+'\nBand: ')
 elif input_phot_sys == 'Vega':
-    input_phot_band = input_phot_sys = input('Photometric Band Options: \n'+bands_Vega+'\nBand: ')
+    input_phot_band = input('Photometric Band Options: \n'+bands_Vega+'\nBand: ')
 else:
     print('\nChoose only from the options\n')
 print(input_phot_band)
