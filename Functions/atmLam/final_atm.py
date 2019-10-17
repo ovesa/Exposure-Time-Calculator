@@ -32,7 +32,7 @@ def load_flux(moon_phase):
     sky = loads in the sky spectra. '''
  
 
-    moon_file = 'skytables_' + str(moon_phase) +'.npz'
+    moon_file = str(moon_phase) +'.npz'
     sky = np.load(moon_file)
 
     return sky
