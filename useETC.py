@@ -28,6 +28,8 @@ from Functions.atmLam.final_atm import total_background_flux # (moonphase, airma
 
 from Functions.atm_trans.atm_trans import atm_trans # (wavelength, airmass, path)
 
+from Functions.calcPhotFlux.calcPhotFlux import calcPhotFlux # (mag_sys,band,mag)
+
 
 # instLam can now be fully called!
 # telLam can now be called!
@@ -57,14 +59,32 @@ atmos_transmission_path = 'Functions/atm_trans/'
 # print(atm_trans(0.5, 1.2, atmos_transmission_path))
 
 # print(total_background_flux(moonphase_path+'45', 1.2, 0.55))
-
+print(calcPhotFlux('AB', 'g', 15.0))
 
 # Main User Inputs:
 
 instrument_list = '[AGILE, NICFPS, ARCTIC, T-SPEC, DIS, ARCES]'
 filter_list = '[jc_U, jc_B, jc_V, jc_R, jc_I, mko_H, mko_J, mko_K, sdss_g, sdss_r, sdss_i, sdss_u, sdss_z]'
-moonphase_list = '[NM, WxC, FQ, WxG, FM, WnG, TQ, WnC]'
+moonphase_list = '[0, 45, 90, 135, 180, 225, 270, 315]'
 photometric_system = '[AB, Vega]'
+bands_AB = '[u,g,r,i,z]'
+bands_Vega = '[U,B,V,R,I,J,H,K]'
+
+
+input_phot_sys = input('Photometric System Options: \n'+photometric_system+'\nSystem: ')
+print(input_phot_sys)
+if input_phot_sys == 'AB':
+    input_phot_band = input_phot_sys = input('Photometric Band Options: \n'+bands_AB+'\nBand: ')
+elif input_phot_sys == 'Vega':
+    input_phot_band = input_phot_sys = input('Photometric Band Options: \n'+bands_Vega+'\nBand: ')
+else:
+    print('\nChoose only from the options\n')
+print(input_phot_band)
+
+input_magnitude = input('Enter magnitude of target: ')
+input_magnitude = float(input_magnitude)
+print(input_magnitude)
+
 
 input_instrument = input('Instrument Options:\n'+instrument_list+'\nInstrument: ')
 if input_instrument == 'DIS':
@@ -74,7 +94,6 @@ if input_instrument == 'DIS':
 
 input_filter = input('Filter Options:\n'+filter_list+'\nFilter: ')
 
-input_phot_sys = input('Photometric System Options: \n'+photometric_system+'\nSystem: ')
 
 input_StoN = input('Please enter S/N: ')
 StoN = float(input_StoN)
@@ -88,7 +107,7 @@ input_wave_range = input('Enter Wavelength (microns - deal with it): ')
 wavelength = float(input_wave_range)
 
 
-moonphase = input('Moon Phase Options:\n'+moonphase_list+'\nMoon Phase: ')
+moonphase = input('Moon-Sun Angle Options:\n'+moonphase_list+'\nMoon Phase: ')
 
 input_airmass = input('Please enter airmass: ')
 airmass = float(input_airmass)
@@ -112,8 +131,6 @@ airmass (float)
 
 #  MAIN CALLS WITH PARAMETERS:
 
-# get telescope area
-Tel_Collect_Area = telLam(340.0, 47.0, 0.97) # APO VALUES HARD CODED HERE... in cm^2
 
 # get efficiency of chosen instrument, at the given wavelenght:
 if input_instrument == 'AGILE':
@@ -135,9 +152,26 @@ else:
     print('\nAdhere to options, please.\n')
 
 
-# filter efficiency
-filter_eff = filtLAM(input_filter, wavelength)
+print('inst_eff: ', inst_eff)
 
+# get telescope area
+Tel_Collect_Area = telLam(340.0, 47.0, 0.97) # APO VALUES HARD CODED HERE... in cm^2
+print('Tel_Collect_Area: ', Tel_Collect_Area)
+
+# filter efficiency
+filter_eff = filtLAM(filter_path+input_filter, wavelength)
+print('filter_eff: ', filter_eff)
 # background flux
 back_flux = total_background_flux(moonphase_path+moonphase, airmass, wavelength)
+print('back_flux: ', back_flux)
+
+# get atmos transmission
+atmos_transmission = atm_trans(wavelength, airmass, atmos_transmission_path)
+print('atmos_transmission: ', atmos_transmission)
+
+print('all others done')
+
+# get photon flux
+phot_flux = calcPhotFlux(input_phot_sys, input_phot_band, input_magnitude)
+print('phot_flux: ', phot_flux)
 

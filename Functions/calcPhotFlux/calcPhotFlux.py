@@ -8,16 +8,7 @@ import matplotlib.pyplot as plt
 h = 6.626*10**-27 #erg s
 c = 2.998*10**14 #um/s
 
-#will be evaluated at central wavelength of band
-def calcPhotFlux(mag_sys,band,mag):
-    if mag_sys == "AB":
-        F,lam = ABFlux(band,mag)
-    elif mag_sys == "Vega":
-        F,lam = VegaFlux(band,mag) #F [ergs cm^-2 s^-1 um^-1], lam [um]
-    else:
-        print('Magnitude system is not compatible')
-    S = (F*lam)/(h*c)
-    return S
+
 
 
 def ABFlux(band,mag):
@@ -73,6 +64,16 @@ def VegaFlux(band,mag):
     return F, lam
 
 
+#will be evaluated at central wavelength of band
+def calcPhotFlux(mag_sys,band,mag):
+    if mag_sys == 'AB':
+        F,lam = ABFlux(band,mag)
+    elif mag_sys == 'Vega':
+        F,lam = VegaFlux(band,mag) #F [ergs cm^-2 s^-1 um^-1], lam [um]
+    else:
+        print('Magnitude system is not compatible')
+    S = (F*lam)/(h*c)
+    return S
 
 
 
