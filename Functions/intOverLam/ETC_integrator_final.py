@@ -27,14 +27,15 @@ import math
 from astropy.table import Table, Column
 from scipy import integrate
 
-def GetSprime(lambda_vals, phot_flux, atm_e, tel_e, filt_e, inst_e, det_e):
-    
-    h = 6.62e-27 #planck's constant ergs s
-    c = 2.99e10 #speed of light cm s^-1
-    kb = 1.38e-16 #Boltzmaaaan's con$tant ergs/K
-    Y = np.array(phot_flux)*atm_e*tel_e*inst_e*filt_e*det_e #determine the integrand
-    Sprime = integrate.simps(Y,lambda_vals, even='first') #Calls a Simpson Rule integrator to calculate Sprime
-    return Sprime
+def GetSprime(lambda_vals, phot_flux, atm_e, tel_e, inst_e, filt_e, det_e):
+
+    if type(lambda_vals) is float or type(lambda_vals) is int:
+        Y = phot_flux*atm_e*tel_e*inst_e*filt_e*det_e
+        return Y
+    else: 
+        Y = np.array(phot_flux)*atm_e*tel_e*inst_e*filt_e*det_e #determine the integrand
+        Sprime = integrate.simps(Y,lambda_vals, even='first') #Calls a Simpson Rule integrator to calculate Sprime
+        return Sprime
 
 
 

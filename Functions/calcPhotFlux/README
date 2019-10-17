@@ -1,47 +1,12 @@
-This file will allow a user to specify a line for a spectrograph or provide 
-a magnitude and filter system.  They will also be able to choose from inputting 
-a spectrum, choose a temperature for a BB, or choosing an SED (e.g. spectal
-types, galaxy types, etc.).
 
-Inputs: type_of_inst, spec_form, lambda or mag/filter/phot_system
+Main Function: S = calcPhotFlux(mag_sys,band,mag)
+Inputs: magnitude system ("AB" or "Vega"),
+band ("AB"-"u","g","r","i","z"; "Vega"-"U","B","V","R","I","Z","J","H","K"), 
+and magnitude (e.g. 15)
+Outputs: S (Photon Flux) [photons/cm^2/s/um]
+
+Sub functions: 
+Flam, lam = ABFlux(band,mag) 
+Flam, lam = VegaFlux(band,mag)
 
 
-
-phot_flux = calcPhotFlux(type_of_inst)
-
-    filt_sdss = ['u','g','r','i','z']
-    filt_vega = ['U','B','V','R','I']
-    filt_2mass = ['J','H','K']
-    
-    
-    ## Central wavelengths of filters
-    filt_sdss_lam = [u_cen,g_cen,r_cen,i_cen,z_cen]
-    filt_vega_lam = [U_cen,B_cen,V_cen,R_cen,I_cen]
-    filt_2mass_lam = [J_cen, H_cen, K_cen]
-    
-    
-        if type_of_inst == 'imager'
-            read in mag/filter/phot_system
-            if phot_system == 'AB' and 'filter' in filt_sdss
-                filt = filt_sdss_lam
-            elseif phot_system == 'AB' and 'filter' in filt_vega
-                filt = filt_2mass_lam
-            elseif phot_system == 'Vega' and 'filter' in filt_2mass
-                filt = filt_vega_lam
-            else
-                return 'unknown mag system'
-            
-        elseif type_of_inst == 'spectrograph'
-            read in lambda of line
-            lam_cen = lambda
-            
-        else 
-            return 'unknown instrument type'
-        
-        
-    ....
-    
-return phot_flux
-    
-    
-    

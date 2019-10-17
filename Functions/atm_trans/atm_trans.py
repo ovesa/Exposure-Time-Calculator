@@ -4,6 +4,7 @@ def atm_trans(wl,airmass,path):
     from scipy import interpolate
     
     #put wl in an array if a single value is entered
+    
     if type(wl) is float or type(wl) is int or type(wl) is list:
         wl = np.array([wl])
     
@@ -24,19 +25,25 @@ def atm_trans(wl,airmass,path):
         #create an interpolation at each airmass in case entered wavlength not contained in file
         interp.append(interpolate.interp1d(hdu['lam'],hdu['trans_ma']))
 
-    
-    ll = min(lam[0]) #lower limit of wavelength
-    ul = max(lam[0]) #upper limit of wavelength
-    
-    
     trans_at_wl = [] #transmission at entered wavelength(s)
-    for i in interp:
-        trans_at_wl.append(i(wl_nm)[0]) #might need to add [0]? weird for single value vs loops. Right now works for loops.
     
-    #print(trans_at_wl)
+    #loop over wavelengths and interpolate the transmission (currently only takes one wl, so some uneccessary code still exists here)
+    for j in wl_nm:
+        holder = []
+        for i in interp:
+            holder.append(i(j))
+        trans_at_wl.append(holder)
     
-    #interpolation of transmission at given wl as a function of airmass
-    interp_am = interpolate.interp1d(am_on_file,trans_at_wl)
-    
+    #create interpolation of transmission at given wl as a function of airmass
+    interp_am = []
+    for i in trans_at_wl:
+        interp_am.append(interpolate.interp1d(am_on_file,i))
+
+    #get interpd transmission at one wl given an airmass  
+    trans_at_wl_am = []
+    for i in np.arange(0,len(interp_am)):
+        trans_at_wl_am.append(interp_am[i](airmass))
+        
+        
     #return transmission for that wavelength at that airmass
-    return interp_am(airmass)
+    return trans_at_wl_am[0]
