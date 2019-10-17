@@ -57,4 +57,9 @@ def filtLAM(filt,wl):
                 #print(str(wl[i]) + ' is not explicitly defined in the filter curve. Using interpolation.')
                 new_trans = interp(wl[i]) #plug in to interpolation function
                 trans_vals = np.append(trans_vals,new_trans)
+                
+        for i in np.arange(0,len(trans_vals)):
+            if trans_vals[i] < 0:
+                trans_vals[i] = 0
+                
         return trans_vals
