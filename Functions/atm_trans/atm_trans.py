@@ -16,7 +16,7 @@ def atm_trans(wl,airmass,path):
     lam = []
     interp = []
     for i in am_on_file:
-        skytable = fits.open(path+'/skytable_0_'+str(i)+'.fits') #open skytable fits file
+        skytable = fits.open(path+'skytable_0_'+str(i)+'.fits') #open skytable fits file
         hdu = skytable[1].data #extract data
         trans.append(hdu['trans_ma']) #extract atmospheric transmission
         lam.append(hdu['lam']) #extract wavelength
