@@ -184,7 +184,7 @@ S_prime = GetSprime(wavelength, phot_flux, atmos_transmission, 1.0, inst_eff, fi
 print('Sprime is: ', S_prime)
 
 # Final exposure time result!
-Exposure_time = calc_expT(StoN, phot_flux, back_flux, 1.0, Tel_Collect_Area) # calc_expT(SN,flux,back,seeing,tel)
+Exposure_time = calc_expT(StoN, S_prime, back_flux, 1.0, Tel_Collect_Area) # calc_expT(SN,flux,back,seeing,tel)
 print()
 print('Exposure time: ', Exposure_time)
 
