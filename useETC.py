@@ -29,6 +29,8 @@ from Functions.atm_trans.atm_trans import atm_trans # (wavelength, airmass, path
 
 from Functions.calcPhotFlux.calcPhotFlux import calcPhotFlux # (mag_sys,band,mag)
 
+from Functions.intOverLam.ETC_integrator_final import GetSprime # (lambda_vals, phot_flux, atm_e, tel_e, inst_e, filt_e, det_e)
+
 
 # instLam can now be fully called!
 # telLam can now be called!
@@ -58,7 +60,7 @@ atmos_transmission_path = 'Functions/atm_trans/'
 # print(atm_trans(0.5, 1.2, atmos_transmission_path))
 
 # print(total_background_flux(moonphase_path+'45', 1.2, 0.55))
-print(calcPhotFlux('AB', 'g', 15.0))
+# print(calcPhotFlux('AB', 'g', 15.0))
 
 # Main User Inputs:
 
@@ -71,18 +73,18 @@ bands_Vega = '[U,B,V,R,I,J,H,K]'
 
 
 input_phot_sys = input('Photometric System Options: \n'+photometric_system+'\nSystem: ')
-print(input_phot_sys)
+# print(input_phot_sys)
 if input_phot_sys == 'AB':
     input_phot_band = input('Photometric Band Options: \n'+bands_AB+'\nBand: ')
 elif input_phot_sys == 'Vega':
     input_phot_band = input('Photometric Band Options: \n'+bands_Vega+'\nBand: ')
 else:
     print('\nChoose only from the options\n')
-print(input_phot_band)
+# print(input_phot_band)
 
 input_magnitude = input('Enter magnitude of target: ')
 input_magnitude = float(input_magnitude)
-print(input_magnitude)
+# print(input_magnitude)
 
 
 input_instrument = input('Instrument Options:\n'+instrument_list+'\nInstrument: ')
@@ -128,6 +130,10 @@ airmass (float)
 
 '''
 
+print('**************')
+print('Starting Exposure Time Calculation')
+print('**************')
+
 #  MAIN CALLS WITH PARAMETERS:
 
 
@@ -168,9 +174,19 @@ print('back_flux: ', back_flux)
 atmos_transmission = atm_trans(wavelength, airmass, atmos_transmission_path)
 print('atmos_transmission: ', atmos_transmission)
 
-print('all others done')
 
 # get photon flux
 phot_flux = calcPhotFlux(input_phot_sys, input_phot_band, input_magnitude)
 print('phot_flux: ', phot_flux)
+
+# GetSprime(lambda_vals, phot_flux, atm_e, tel_e, inst_e, filt_e, det_e)
+S_prime = GetSprime(wavelength, phot_flux, atmos_transmission, 1.0, inst_eff, filter_eff, 1.0) # tel_e = 1.0, det_e = 1.0
+print('Sprime is: ', S_prime)
+
+# Final exposure time result!
+Exposure_time = calc_expT(StoN, phot_flux, back_flux, 1.0, Tel_Collect_Area) # calc_expT(SN,flux,back,seeing,tel)
+print()
+print('Exposure time: ', Exposure_time)
+
+
 
