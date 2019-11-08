@@ -127,7 +127,7 @@ def total_background_flux(moon_phase,X,wav):
     wav = wavelength (nm)
     
     Output:
-    bg_photon_flux = the final background photon flux (ph/s/m^2/arcsec^2)
+    bg_photon_flux = the final background photon flux (ph/s/m^2/micron/arcsec^2)
     '''
     
     
