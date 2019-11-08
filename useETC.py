@@ -60,7 +60,7 @@ atmos_transmission_path = 'Functions/atm_trans/'
 # print(atm_trans(0.5, 1.2, atmos_transmission_path))
 
 # print(total_background_flux(moonphase_path+'45', 1.2, 0.55))
-# print(calcPhotFlux('AB', 'g', 15.0))
+# print(calcPhotFlux('AB', 'g', 20.0))
 
 # Main User Inputs:
 
@@ -90,10 +90,10 @@ input_magnitude = float(input_magnitude)
 input_instrument = input('Instrument Options:\n'+instrument_list+'\nInstrument: ')
 if input_instrument == 'DIS':
     input_channel = input('R300 or B400? (Enter R or B): ')
-    # if input_channel == 'R':
-    #     inst_throughput = getDIS()
+    
 
-input_filter = input('Filter Options:\n'+filter_list+'\nFilter: ')
+
+# input_filter = input('Filter Options:\n'+filter_list+'\nFilter: ')
 
 
 input_StoN = input('Please enter S/N: ')
@@ -106,6 +106,13 @@ StoN = float(input_StoN)
 # wave_range = np.arange(input_wave_range[0], input_wave_range[1], input_wave_range[2])
 input_wave_range = input('Enter Wavelength (microns - deal with it): ')
 wavelength = float(input_wave_range)
+
+if input_instrument == 'AGILE' or input_instrument == 'ARCTIC' or input_instrument == 'NICFPS':
+    input_filter = input('Filter Options:\n'+filter_list+'\nFilter: ')
+    # filter efficiency
+    filter_eff = filtLAM(filter_path+input_filter, wavelength)
+else:
+    filter_eff = 1.0
 
 
 moonphase = input('Moon-Sun Angle Options:\n'+moonphase_list+'\nMoon Phase: ')
@@ -163,9 +170,9 @@ print('inst_eff: ', inst_eff)
 Tel_Collect_Area = telLam(340.0, 47.0, 0.97) # APO VALUES HARD CODED HERE... in cm^2
 print('Tel_Collect_Area: ', Tel_Collect_Area)
 
-# filter efficiency
-filter_eff = filtLAM(filter_path+input_filter, wavelength)
+# filter_eff got called earlier.  Only called if imager is chosen.  Otherwise set to 1.0
 print('filter_eff: ', filter_eff)
+
 # background flux
 back_flux = total_background_flux(moonphase_path+moonphase, airmass, wavelength)
 print('back_flux: ', back_flux)
