@@ -13,5 +13,6 @@ def calc_expT(SN,flux,back,seeing,tel):
 	'''
 	back_area = np.pi * seeing**2 #background area
 	bgr = back*1e8 #convert background SB to units of counts/s/cm^2/A/arcsec^2
-	expT = (((bgr*back_area*tel) + flux)/flux**2)*(SN**2) #from noise equation
+	count = flux * 1e4
+	expT = (((bgr*back_area*tel) + count)/count**2)*(SN**2) #from noise equation
 	return expT
