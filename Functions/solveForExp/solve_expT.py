@@ -7,7 +7,7 @@ def calc_expT(SN,flux,back,seeing,tel):
     ''' returns exposure time given inputs:
     S/N,
     photon flux from source (counts/s/cm^2/um),
-    background SB (counts/s/m^2/arcsec^2),
+    background SB (counts/s/m^2/micron/arcsec^2),
     seeing (arcsec),
     telescope collecting area (cm^2)
     '''
