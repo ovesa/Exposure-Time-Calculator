@@ -12,7 +12,7 @@ def calc_expT(SN,flux,back,seeing,tel):
     telescope collecting area (cm^2)
     '''
     back_area = np.pi * seeing**2 #background area
-    bgr = back#*(10**4) #convert background SB to units of counts/s/cm^2/arcsec^2
+    bgr = back/(10**4) #convert background SB to units of counts/s/cm^2/arcsec^2
     #expT = (((bgr*back_area*tel) + flux)/flux**2)*SN**2 #from noise equation
-    expT = ((SN/(flux*tel**.5))*(flux+back_area*bgr)**.5)**2
+    expT = ((SN/(flux*np.sqrt(tel)))*np.sqrt(flux+back_area*bgr))**2
     return expT
