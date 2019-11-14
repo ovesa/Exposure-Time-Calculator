@@ -1,4 +1,3 @@
-
 import numpy as np
 import math
 from astropy.io import fits
@@ -190,8 +189,12 @@ print('phot_flux: ', phot_flux)
 S_prime = GetSprime(wavelength, phot_flux, atmos_transmission, 1.0, inst_eff, filter_eff, 1.0) # tel_e = 1.0, det_e = 1.0
 print('Sprime is: ', S_prime)
 
+# GetSprime(lambda_vals, phot_flux, atm_e, tel_e, inst_e, filt_e, det_e)
+B_prime = GetSprime(wavelength, back_flux, atmos_transmission, 1.0, inst_eff, filter_eff, 1.0) # tel_e = 1.0, det_e = 1.0
+print('Sprime is: ', B_prime)
+
 # Final exposure time result!
-Exposure_time = calc_expT(StoN, S_prime, back_flux, 1.0, Tel_Collect_Area) # calc_expT(SN,flux,back,seeing,tel)
+Exposure_time = calc_expT(StoN, S_prime, B_prime, 1.0, Tel_Collect_Area) # calc_expT(SN,flux,back,seeing,tel)
 print()
 print('Exposure time: ', Exposure_time)
 
