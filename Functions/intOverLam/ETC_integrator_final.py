@@ -29,12 +29,12 @@ from scipy import integrate
 
 def GetSprime(lambda_val, phot_flux, atm_e, tel_e, inst_e, filt_e, det_e):
 
-    if type(lambda_vals) is float or type(lambda_vals) is int:
+    if type(lambda_val) is float or type(lambda_val) is int:
         Y = phot_flux*atm_e*tel_e*inst_e*filt_e*det_e*lambda_val
         return Y
     else: 
         Y = np.array(phot_flux)*atm_e*tel_e*inst_e*filt_e*det_e #determine the integrand
-        Sprime = integrate.simps(Y,lambda_vals, even='first') #Calls a Simpson Rule integrator to calculate Sprime
+        Sprime = integrate.simps(Y,lambda_val, even='first') #Calls a Simpson Rule integrator to calculate Sprime
         return Sprime
 
 
