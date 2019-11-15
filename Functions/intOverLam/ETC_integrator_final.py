@@ -27,10 +27,10 @@ import math
 from astropy.table import Table, Column
 from scipy import integrate
 
-def GetSprime(lambda_vals, phot_flux, atm_e, tel_e, inst_e, filt_e, det_e):
+def GetSprime(lambda_val, phot_flux, atm_e, tel_e, inst_e, filt_e, det_e):
 
     if type(lambda_vals) is float or type(lambda_vals) is int:
-        Y = phot_flux*atm_e*tel_e*inst_e*filt_e*det_e
+        Y = phot_flux*atm_e*tel_e*inst_e*filt_e*det_e*lambda_val
         return Y
     else: 
         Y = np.array(phot_flux)*atm_e*tel_e*inst_e*filt_e*det_e #determine the integrand
