@@ -187,11 +187,11 @@ print('phot_flux: ', phot_flux)
 
 # GetSprime(lambda_vals, phot_flux, atm_e, tel_e, inst_e, filt_e, det_e)
 S_prime = GetSprime(wavelength, phot_flux, atmos_transmission, 1.0, inst_eff, filter_eff, 1.0) # tel_e = 1.0, det_e = 1.0
-print('Sprime is: ', S_prime)
+print('Sprime is: ', S_prime*Tel_Collect_Area)
 
 # GetSprime(lambda_vals, phot_flux, atm_e, tel_e, inst_e, filt_e, det_e)
 B_prime = GetSprime(wavelength, back_flux, atmos_transmission, 1.0, inst_eff, filter_eff, 1.0) # tel_e = 1.0, det_e = 1.0
-print('Sprime is: ', B_prime)
+print('Sprime is: ', B_prime*Tel_Collect_Area)
 
 # Final exposure time result!
 Exposure_time = calc_expT(StoN, S_prime, B_prime, 1.0, Tel_Collect_Area) # calc_expT(SN,flux,back,seeing,tel)
