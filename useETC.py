@@ -92,7 +92,7 @@ if input_instrument == 'DIS':
     
 
 
-# input_filter = input('Filter Options:\n'+filter_list+'\nFilter: ')
+input_filter = input('Filter Options:\n'+filter_list+'\nFilter: ')
 
 
 input_StoN = input('Please enter S/N: ')
@@ -109,7 +109,7 @@ wavelength = float(input_wave_range)
 if input_instrument == 'AGILE' or input_instrument == 'ARCTIC' or input_instrument == 'NICFPS':
     input_filter = input('Filter Options:\n'+filter_list+'\nFilter: ')
     # filter efficiency
-    filter_eff = filtLAM(filter_path+input_filter, wavelength)
+    filter_eff,bandpass = filtLAM(filter_path+input_filter, wavelength)
 else:
     filter_eff = 1.0
 
@@ -186,11 +186,11 @@ phot_flux = calcPhotFlux(input_phot_sys, input_phot_band, input_magnitude)
 print('phot_flux: ', phot_flux)
 
 # GetSprime(lambda_vals, phot_flux, atm_e, tel_e, inst_e, filt_e, det_e)
-S_prime = GetSprime(0.1, phot_flux, atmos_transmission, 1.0, inst_eff, filter_eff, 1.0) # tel_e = 1.0, det_e = 1.0
+S_prime = GetSprime(bandpass, phot_flux, atmos_transmission, 1.0, inst_eff, filter_eff, 1.0) # tel_e = 1.0, det_e = 1.0
 print('Sprime is: ', S_prime*Tel_Collect_Area)
 
 # GetSprime(lambda_vals, phot_flux, atm_e, tel_e, inst_e, filt_e, det_e)
-B_prime = GetSprime(0.1, back_flux, atmos_transmission, 1.0, inst_eff, filter_eff, 1.0) # tel_e = 1.0, det_e = 1.0
+B_prime = GetSprime(bandpass), back_flux, atmos_transmission, 1.0, inst_eff, filter_eff, 1.0) # tel_e = 1.0, det_e = 1.0
 print('Bprime is: ', B_prime*Tel_Collect_Area)
 
 # Final exposure time result!
