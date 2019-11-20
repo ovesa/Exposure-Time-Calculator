@@ -14,6 +14,22 @@ def filtLAM(filt,wl):
     import numpy as np
     from scipy import interpolate
     
+    #function to find fwhm of a filter (bandpass)
+    def FWHM(X,Y):
+        #problem with sdss_z!
+        half_max = max(Y) / 2.
+        #find when function crosses line half_max (when sign of diff flips)
+    
+        #take the 'derivative' of signum(half_max - Y[])
+        d = np.sign(half_max - np.array(Y[0:-1])) - np.sign(half_max - np.array(Y[1:]))
+    
+        #find the left and right most indices
+        left_idx = np.where(d > 0)[0]
+        right_idx = np.where(d < 0)[-1]
+        return np.abs(X[right_idx] - X[left_idx]) #return the difference (full width)
+
+
+    
     #read in the info for the selected filter. text files are two columns(wl, transmission) space delimited.
     f = open(filt+'.txt','r')
     lines = f.readlines()
@@ -22,6 +38,12 @@ def filtLAM(filt,wl):
     for i in lines:
         wavelength = np.append(wavelength,float(i.split(' ')[0]))
         transmission = np.append(transmission,float(i.split(' ')[1]))
+    
+    #finding the bandpass (sdss_z has a weird curve so I do it manually)    
+    if filt != 'sdss_z':
+        bandpass = FWHM(wavelength,transmission)    
+    else:
+        bandpass = wavelength[10500]-wavelength[5380]
         
     ll = min(wavelength) #lower limit of wavelength for this filter
     ul = max(wavelength) #upper limit of wavelength for this filter
@@ -62,4 +84,4 @@ def filtLAM(filt,wl):
             if trans_vals[i] < 0:
                 trans_vals[i] = 0
                 
-        return trans_vals
+        return trans_vals, bandpass
