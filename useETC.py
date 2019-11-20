@@ -92,7 +92,7 @@ if input_instrument == 'DIS':
     
 
 
-input_filter = input('Filter Options:\n'+filter_list+'\nFilter: ')
+#input_filter = input('Filter Options:\n'+filter_list+'\nFilter: ')
 
 
 input_StoN = input('Please enter S/N: ')
