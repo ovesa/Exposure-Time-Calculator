@@ -1,15 +1,20 @@
 def filtLAM(filt,wl):
-    '''Input:
+    '''
+    Given wavelength and a filter, returns the filter efficinecy at that wavelength
     
-        filt: Input filter being used as a string. Currently supports Johnson-Cousins ('jc') UBVRI,
+    Input:
+    
+        filt: Input the filter being used as a string. Currently supports Johnson-Cousins ('jc') UBVRI,
         Sloan Digital Sky Survey ('sdss') ugriz, and Mauna Kea Observatory JHK ('mko'). For example, 'jc_U', sdss_g',
         or 'mko_J' would all be valid inputs.
         
-        wl: Wavelength(s) of interest in microns. Can input a single value or an array.
+        wl: Wavelengths of interest in microns. Can input a single value or an array.
     
     Output:
     
-        The transmission of the filter as a percentage at the given wavelength(s)'''
+        trasns_vals: The transmission of the filter as a percentage at the given wavelength(s)
+        
+        bandpass: the width of the bandpass of the selected filter (FWHM), in um'''
     
     import numpy as np
     from scipy import interpolate
