@@ -26,7 +26,6 @@ def atm_trans(wl,airmass,path):
         interp.append(interpolate.interp1d(hdu['lam'],hdu['trans_ma']))
 
     trans_at_wl = [] #transmission at entered wavelength(s)
-    
     #loop over wavelengths and interpolate the transmission (currently only takes one wl, so some uneccessary code still exists here)
     for j in wl_nm:
         holder = []
@@ -38,12 +37,11 @@ def atm_trans(wl,airmass,path):
     interp_am = []
     for i in trans_at_wl:
         interp_am.append(interpolate.interp1d(am_on_file,i))
-
-    #get interpd transmission at one wl given an airmass  
+    
+    #get interpd transmission at one wl given an airmass
     trans_at_wl_am = []
     for i in np.arange(0,len(interp_am)):
         trans_at_wl_am.append(interp_am[i](airmass))
         
-        
     #return transmission for that wavelength at that airmass
-    return trans_at_wl_am[0]
+    return np.array(trans_at_wl_am)
