@@ -78,8 +78,8 @@ def air_mass(X,moon_phase):
 
 
 def cal_bg_photon(wav,X,airmass_index,moon_phase):
-    '''This function calculates the final background photon flux for a given wavelength, moon phase, and 
-    airmass. This function is referenced in the total_background_flux function. 
+    '''This function calculates the final background photon flux for a given wavelength, moon phase, and
+    airmass. This function is referenced in the total_background_flux function.
     
     Input:
     wav = wavelength
@@ -100,20 +100,22 @@ def cal_bg_photon(wav,X,airmass_index,moon_phase):
     # raises an error if the inputted wavelength is not within the range of 300 nm to 1200 nm
     # each wavelength array is the same; so, it doesn't matter which one is called
     # changing it to microns which is what the user input is
-    if wav < min(sky['wav_X_1']*0.001) or wav > max(sky['wav_X_1']*0.001):
-        raise Exception('Chosen wavelength out of range (0.3 - 2.5 microns). The wavelength entered was: {} µm'.format(wav))
-    else:
-        # each wavelength array is the same; so, it doesn't matter which one is called
-        # only the flux changes at different airmasses
-        # interpolates the wavelength vs the fluxes of the different airmasses
-        # the array names correpsond to the airmass associated with them
-        interp_flux = interpolate.interp1d(sky['wav_X_1']*0.001,[sky['flux_X_1'],sky['flux_X_1_5'],sky['flux_X_2'],sky['flux_X_2_5'],sky['flux_X_3']])
-        # this gives the flux at that chosen wavelength for a particular airmass
-        bg_photon_flux = interp_flux(wav)[airmass_index]
-            
+    interp_flux = interpolate.interp1d(sky['wav_X_1']*0.001,[sky['flux_X_1'],sky['flux_X_1_5'],sky['flux_X_2'],sky['flux_X_2_5'],sky['flux_X_3']])
+    bg_photon_flux = []
+    for i in wav:
+        if i < min(sky['wav_X_1']*0.001) or i > max(sky['wav_X_1']*0.001):
+            raise Exception('Chosen wavelength out of range (0.3 - 2.5 microns). The wavelength entered was: {} µm'.format(i))
+        else:
+            # each wavelength array is the same; so, it doesn't matter which one is called
+            # only the flux changes at different airmasses
+            # interpolates the wavelength vs the fluxes of the different airmasses
+            # the array names correpsond to the airmass associated with them
+            # this gives the flux at that chosen wavelength for a particular airmass
+            bg_photon_flux.append(interp_flux(i)[airmass_index])
+         
        
         
-    return bg_photon_flux
+    return np.array(bg_photon_flux)
 
 
 
@@ -133,11 +135,5 @@ def total_background_flux(moon_phase,X,wav):
     
     sky = load_flux(moon_phase)
     airmass_value,airmass_index = air_mass(X,moon_phase)
-    bg_photon_flux = cal_bg_photon(wav,airmass_value,airmass_index,moon_phase)[0]
-    return bg_photon_flux # (ph/s/m^2/micron/arcsec^2)
-
-
-
-
-
-
+    bg_photon_flux = cal_bg_photon(wav,airmass_value,airmass_index,moon_phase)
+    return np.array(bg_photon_flux.flatten()) # (ph/s/m^2/micron/arcsec^2)
