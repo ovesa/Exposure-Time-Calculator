@@ -103,8 +103,10 @@ StoN = float(input_StoN)
 # input_wave_range = [float(input_wave_range[i]) for i in range(len(input_wave_range))]
 # HERE IS THE WAVELENGTH RANGE WE WILL USE:
 # wave_range = np.arange(input_wave_range[0], input_wave_range[1], input_wave_range[2])
-input_wave_range = input('Enter Wavelength (microns - deal with it): ')
-wavelength = eval(input_wave_range)
+input_wave_range = input('Enter desired wavelength range as a 2 element np.array: ')
+w1 = eval(input_wave_range)[0]
+w2 = eval(input_wave_range)[1]
+wavelength = np.arange(w1,w2,.0001) #eval(input_wave_range)
 
 if input_instrument == 'AGILE' or input_instrument == 'ARCTIC' or input_instrument == 'NICFPS':
     input_filter = input('Filter Options:\n'+filter_list+'\nFilter: ')
@@ -199,6 +201,11 @@ print('Bprime is: ', B_prime)
 Exposure_time = calc_expT(StoN, S_prime, B_prime, 1.0, Tel_Collect_Area) # calc_expT(SN,flux,back,seeing,tel)
 print()
 print('Exposure time: ', Exposure_time)
+
+plt.plot(wavelength,Exposure_time)
+plt.xlabel('Wavelength(um)')
+plt.ylabel('Exposure Time (s)')
+plt.show()
 
 
 
