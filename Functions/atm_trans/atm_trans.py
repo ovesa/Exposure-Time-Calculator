@@ -1,4 +1,17 @@
 def atm_trans(wl,airmass,path):
+     '''
+    Given wavelength and airmass, returns the atmospheric transmission
+    
+    Input:
+        wl: An array of wavelengths in um to evaluate the atmospheric transmission at
+        
+        airmass: An arimass value representative of the observations (ideally between 1 and 3)
+        
+        path: local path to skytable files which contain the atmospheric transmission information
+        
+    Output:
+        trans_at_wl_am: An array of atmospheric transmission values at the given wavelengths and given airmass'''
+        
     import numpy as np
     from astropy.io import fits
     from scipy import interpolate
