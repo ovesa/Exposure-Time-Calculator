@@ -1,7 +1,7 @@
 def filtLAM(filt,wl):
     '''Input:
     
-        filt: Input filter being used as a string. Currently supports Johnson-Cousins ('jc') UBVRI, 
+        filt: Input filter being used as a string. Currently supports Johnson-Cousins ('jc') UBVRI,
         Sloan Digital Sky Survey ('sdss') ugriz, and Mauna Kea Observatory JHK ('mko'). For example, 'jc_U', sdss_g',
         or 'mko_J' would all be valid inputs.
         
@@ -14,7 +14,6 @@ def filtLAM(filt,wl):
     import numpy as np
     from scipy import interpolate
     
-    #function to find fwhm of a filter (bandpass)
     def FWHM(X,Y):
         #problem with sdss_z!
         half_max = max(Y) / 2.
@@ -28,7 +27,6 @@ def filtLAM(filt,wl):
         right_idx = np.where(d < 0)[-1]
         return np.abs(X[right_idx] - X[left_idx]) #return the difference (full width)
 
-
     
     #read in the info for the selected filter. text files are two columns(wl, transmission) space delimited.
     f = open(filt+'.txt','r')
@@ -38,10 +36,9 @@ def filtLAM(filt,wl):
     for i in lines:
         wavelength = np.append(wavelength,float(i.split(' ')[0]))
         transmission = np.append(transmission,float(i.split(' ')[1]))
-    
-    #finding the bandpass (sdss_z has a weird curve so I do it manually)    
+        
     if filt != 'sdss_z':
-        bandpass = FWHM(wavelength,transmission)    
+        bandpass = FWHM(wavelength,transmission)
     else:
         bandpass = wavelength[10500]-wavelength[5380]
         
@@ -52,9 +49,10 @@ def filtLAM(filt,wl):
     interp = interpolate.interp1d(wavelength,transmission)
     
     #if a single value is entered, put it in an array
+    print(wl)
     if type(wl) is float or type(wl) is int or type(wl) is list:
         wl = np.array([wl])
-        
+    print(wl)
     #check that entered wavelengths fall within filter range
     if wl.any() < ll or wl.any() > ul:
             print('Error: one of your entered wavelengths is outside of the filter range.')
@@ -76,12 +74,12 @@ def filtLAM(filt,wl):
             
             #if they are not an exact match, use the interpolation function to estimate a transmission at that wavelength
             except(IndexError):
-                #print(str(wl[i]) + ' is not explicitly defined in the filter curve. Using interpolation.')
+                print(str(wl[i]) + ' is not explicitly defined in the filter curve. Using interpolation.')
                 new_trans = interp(wl[i]) #plug in to interpolation function
                 trans_vals = np.append(trans_vals,new_trans)
-                
+        
         for i in np.arange(0,len(trans_vals)):
             if trans_vals[i] < 0:
                 trans_vals[i] = 0
-                
-        return trans_vals, bandpass
+            
+        return trans_vals,bandpass
