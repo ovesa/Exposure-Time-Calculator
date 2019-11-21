@@ -12,6 +12,20 @@ c = 2.998*10**14 #um/s
 
 
 def ABFlux(band,mag):
+    
+    '''
+    Calculates flux density if photometric_system = "AB" is input
+    
+    Inputs: 
+    -band = "u","g","r","i","z"
+    -mag = magnitude of source
+    
+    Outputs: 
+    -F = flux density at wavelength lam [erg/cm^2/s/um]
+    -lam = wavelength in microns
+    
+    '''
+    
     lam_cen_list = np.asarray([0.354,0.475,0.622,0.763,0.905]) #microns
     if band == "u":
         lam = lam_cen_list[0]
@@ -31,6 +45,20 @@ def ABFlux(band,mag):
     return F, lam
 
 def VegaFlux(band,mag):
+    
+    '''
+    Calculates flux density if photometric_system = "Vega" is input
+    
+    Inputs: 
+    -band = "U","B","V","R","I","J","H","K"
+    -mag = magnitude of source
+    
+    Outputs: 
+    -F = flux density at wavelength lam [erg/cm^2/s/um]
+    -lam = wavelength in microns
+    
+    '''
+    
     lam_cen_list = np.asarray([0.354,0.442,0.540,0.647,0.7865,1.250,1.635,2.200]) #microns
     f_lam_list = np.asarray([417.5,632,363.1,217.7,112.6,31.47,11.38,3.961])*10**-11 #erg cm^-2 s^-1 A^-1
     if band == "U":
@@ -66,6 +94,19 @@ def VegaFlux(band,mag):
 
 #will be evaluated at central wavelength of band
 def calcPhotFlux(mag_sys,band,mag):
+    
+    '''
+    Calculates photon flux.
+    
+    Inputs: 
+    -mag_sys = "AB" or "Vega"
+    -band = "AB": "u","g","r","i","z"; "Vega":"U","B","V","R","I","J","H","K"
+    -mag = magnitude of source
+    
+    Outputs: S (Photon Flux) [photons/cm^2/s/um]
+
+    '''
+    
     if mag_sys == 'AB':
         F,lam = ABFlux(band,mag)
     elif mag_sys == 'Vega':
