@@ -1,7 +1,37 @@
 
 '''
 Instrument efficiency:
-This function should return some decimal value corresponding to the efficiency of the instrument.
+
+This function returns some decimal value corresponding to the efficiency of the instrument.
+
+    For AGILE, NICFPS, ARCTIC, and ARCES:
+        
+        Input parameters: wavelength, file_name
+
+        wavelength : float or float array.
+
+        file_name : string for instrument efficiency textfile.
+
+
+        returns instrument efficiency for given wavelengths.
+
+
+
+    For DIS, and T-SPEC:
+
+        Input parameters: wavelength, file_name, additional_string
+
+        wavelength : float or float array.
+
+        file_name : string for instrument efficiency textfile.
+
+        additional_string : path to detector efficiency (DIS), or other parameters (T-SPEC)
+
+
+        returns instrument efficiency for given wavelengths.
+
+
+
 '''
 
 import astropy as ap
@@ -18,6 +48,7 @@ AGILE
 AGILE TRANSMISSION: DOES NOT REQUIRE ANY TELESCOPE OR CCD CORRECTION
 Just return the value from getAGILE() given some wavelength.
 '''
+
 
 def getAGILE(lamda_inp, string_name_text_file):
 

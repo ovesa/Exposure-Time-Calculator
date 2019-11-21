@@ -1,6 +1,7 @@
 import numpy as np
 import math
 from astropy.io import fits
+import matplotlib.pyplot as plt
 
 '''
 all imports for functionality:

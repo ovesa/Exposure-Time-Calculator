@@ -59,7 +59,7 @@ def air_mass(X,moon_phase):
     
     
     # loads in the load_flux function
-    sky = load_flux(moon_phase)
+    # sky = load_flux(moon_phase)
     # airmass array
     airmass_array = np.array([1.0,1.5,2.0,2.5,3.0])
    
@@ -133,7 +133,7 @@ def total_background_flux(moon_phase,X,wav):
     '''
     
     
-    sky = load_flux(moon_phase)
+    # sky = load_flux(moon_phase)
     airmass_value,airmass_index = air_mass(X,moon_phase)
     bg_photon_flux = cal_bg_photon(wav,airmass_value,airmass_index,moon_phase)
     return np.array(bg_photon_flux.flatten()) # (ph/s/m^2/micron/arcsec^2)
