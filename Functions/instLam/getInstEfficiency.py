@@ -1,4 +1,3 @@
-
 '''
 Instrument efficiency:
 This function should return some decimal value corresponding to the efficiency of the instrument.
@@ -12,14 +11,15 @@ import scipy.interpolate
 nm_to_mic = 1E-3
 angstrom_to_microns = 1E-4
 
-'''
-AGILE
 
-AGILE TRANSMISSION: DOES NOT REQUIRE ANY TELESCOPE OR CCD CORRECTION
-Just return the value from getAGILE() given some wavelength.
-'''
 
 def getAGILE(lamda_inp, string_name_text_file):
+    '''
+    AGILE
+    
+    AGILE TRANSMISSION: DOES NOT REQUIRE ANY TELESCOPE OR CCD CORRECTION
+    Just return the value from getAGILE() given some wavelength.
+    '''
 
     # Load AGILE data: Contains telescope torrection so this is all that needs to be done for AGILE other than
     # interpolation for a finer grid.
@@ -30,23 +30,24 @@ def getAGILE(lamda_inp, string_name_text_file):
 
     return Agile_auxilary(lamda_inp)
 
-'''
-NICFPS
 
-Given: detector efficiency only.  The rest are assumed to be unity.  
-Telescope correction must be performed for NICFPS.
-
-NICFPS detector: The detector is a Rockwell Hawaii 1-RG 1024x1024 HgCdTe device with a 
-0.273 arsec/pixel scale and 4.58 arcmin sqaure, unvignetted field, and sensitivity from 0.85 to 2.4 microns.
-
-NICFPS Digitized using WebDigitizer: https://automeris.io/WebPlotDigitizer/
-https://www.eso.org/sci/facilities/lasilla/instruments/sofi/inst/HawaiiDetector.html
-
-The detector as tested by Rockwell demonstrates a mean quantum efficiency (QE) of 73.0% in J band and 81.9% in Ks band. 
-H-band QE is approximately mid-way between these values on the typical H1RG.)
-'''
 
 def getNICFPS(lamda_inp, string_name_text_file):
+    '''
+    NICFPS
+    
+    Given: detector efficiency only.  The rest are assumed to be unity.  
+    Telescope correction must be performed for NICFPS.
+    
+    NICFPS detector: The detector is a Rockwell Hawaii 1-RG 1024x1024 HgCdTe device with a 
+    0.273 arsec/pixel scale and 4.58 arcmin sqaure, unvignetted field, and sensitivity from 0.85 to 2.4 microns.
+    
+    NICFPS Digitized using WebDigitizer: https://automeris.io/WebPlotDigitizer/
+    https://www.eso.org/sci/facilities/lasilla/instruments/sofi/inst/HawaiiDetector.html
+    
+    The detector as tested by Rockwell demonstrates a mean quantum efficiency (QE) of 73.0% in J band and 81.9% in Ks band. 
+    H-band QE is approximately mid-way between these values on the typical H1RG.)
+    '''
     
     # Load NICFPS data (in microns, um)
 
@@ -58,15 +59,16 @@ def getNICFPS(lamda_inp, string_name_text_file):
 
 
 
-'''
-ARCTIC
 
-Given: CCD plot on ARCTIC page.  Other efficiencies set to unity.
-Telescope correction must be performed on ARCTIC.
-Digitized using: https://automeris.io/WebPlotDigitizer/
-'''
 
 def getARCTIC(lamda_inp, string_name_text_file):
+    '''
+    ARCTIC
+    
+    Given: CCD plot on ARCTIC page.  Other efficiencies set to unity.
+    Telescope correction must be performed on ARCTIC.
+    Digitized using: https://automeris.io/WebPlotDigitizer/
+    '''
 
     # Load ARCTIC data (in nm)
 
@@ -77,23 +79,23 @@ def getARCTIC(lamda_inp, string_name_text_file):
     return Arctic_auxilary(lamda_inp) * 0.01 # %Transmission to decimal.
 
 
-'''
-ARCES
 
-TK2048E 2048x2048 pixel CCD
-QE Curve at :https://www.apo.nmsu.edu/arc35m/Instruments/SPICAM/spicamusersguide_contents.html
-
-Two cross-dispersion UBK7 prisms at 45deg (we do not know what the tranmission is)
-
-Diffraction grating: 31.6 grooves/mm, blaze angle b = 63.5 deg (nominal), or tan b = 2
-incident angle = 69.5 deg
-
-We also do not know the throughput of the grating
-
-
-'''
 
 def getARCES(lamda_inp, string_name_text_file):
+    '''
+    ARCES
+    
+    TK2048E 2048x2048 pixel CCD
+    QE Curve at :https://www.apo.nmsu.edu/arc35m/Instruments/SPICAM/spicamusersguide_contents.html
+    
+    Two cross-dispersion UBK7 prisms at 45deg (we do not know what the tranmission is)
+    
+    Diffraction grating: 31.6 grooves/mm, blaze angle b = 63.5 deg (nominal), or tan b = 2
+    incident angle = 69.5 deg
+    
+    We also do not know the throughput of the grating
+    
+    '''
 
     # Load ARCES data (in nm)
 
@@ -104,19 +106,19 @@ def getARCES(lamda_inp, string_name_text_file):
     return Arces_auxilary(lamda_inp) * 0.01 # %QE to decimal
 
 
-'''
-DIS
 
-Standard DIS III grating setup is either B400/R300 or B1200/R1200.
-
-These are the diffractions gratings which are still in use (whose plots were provided)
-
-Options: 5 gratings, 2 CCD's (red and blue)
-
-
-'''
 
 def getDIS(lamda_inp, string_name_text_file, ccd_string):
+    '''
+    DIS
+    
+    Standard DIS III grating setup is either B400/R300 or B1200/R1200.
+    
+    These are the diffractions gratings which are still in use (whose plots were provided)
+    
+    Options: 5 gratings, 2 CCD's (red and blue)
+    
+    '''
 
     # load DIS diffraction throughput:
 
@@ -135,21 +137,21 @@ def getDIS(lamda_inp, string_name_text_file, ccd_string):
 
 
 
-'''
-TRIPLE SPEC
 
-TripleSpec is a cross-dispersed near-infrared spectrograph that provides simultaneous continuous wavelength 
-coverage from 0.95-2.46um (0.95 - 2.460 um) in five spectral orders.
-
-The primary configuration of the instrument delivers a spectral resolution of R=3500 in a 1.1 arcsecond 
-slit at 2.1 pixels per slit on the spectrograph array. Slits with 0.7", 1.5", and 1.7" are also available.
-
-Gratings: all in same file.
-Everything else: ...everything else! (detector, optics, etc.)
-
-'''
 
 def getTSPEC(lamda_inp, string_name_text_file, ee_string):
+    '''
+    TRIPLE SPEC
+    
+    TripleSpec is a cross-dispersed near-infrared spectrograph that provides simultaneous continuous wavelength 
+    coverage from 0.95-2.46um (0.95 - 2.460 um) in five spectral orders.
+    
+    The primary configuration of the instrument delivers a spectral resolution of R=3500 in a 1.1 arcsecond 
+    slit at 2.1 pixels per slit on the spectrograph array. Slits with 0.7", 1.5", and 1.7" are also available.
+    
+    Gratings: all in same file.
+    Everything else: ...everything else! (detector, optics, etc.)
+    '''
 
     # load TSPEC data in microns:
 
