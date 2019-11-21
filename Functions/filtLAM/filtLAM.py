@@ -49,10 +49,10 @@ def filtLAM(filt,wl):
     interp = interpolate.interp1d(wavelength,transmission)
     
     #if a single value is entered, put it in an array
-    print(wl)
+    
     if type(wl) is float or type(wl) is int or type(wl) is list:
         wl = np.array([wl])
-    print(wl)
+    
     #check that entered wavelengths fall within filter range
     if wl.any() < ll or wl.any() > ul:
             print('Error: one of your entered wavelengths is outside of the filter range.')
@@ -74,7 +74,7 @@ def filtLAM(filt,wl):
             
             #if they are not an exact match, use the interpolation function to estimate a transmission at that wavelength
             except(IndexError):
-                print(str(wl[i]) + ' is not explicitly defined in the filter curve. Using interpolation.')
+            
                 new_trans = interp(wl[i]) #plug in to interpolation function
                 trans_vals = np.append(trans_vals,new_trans)
         
