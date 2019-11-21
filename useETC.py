@@ -92,7 +92,7 @@ if input_instrument == 'DIS':
     
 
 
-#input_filter = input('Filter Options:\n'+filter_list+'\nFilter: ')
+# input_filter = input('Filter Options:\n'+filter_list+'\nFilter: ')
 
 
 input_StoN = input('Please enter S/N: ')
@@ -104,7 +104,7 @@ StoN = float(input_StoN)
 # HERE IS THE WAVELENGTH RANGE WE WILL USE:
 # wave_range = np.arange(input_wave_range[0], input_wave_range[1], input_wave_range[2])
 input_wave_range = input('Enter Wavelength (microns - deal with it): ')
-wavelength = float(input_wave_range)
+wavelength = eval(input_wave_range)
 
 if input_instrument == 'AGILE' or input_instrument == 'ARCTIC' or input_instrument == 'NICFPS':
     input_filter = input('Filter Options:\n'+filter_list+'\nFilter: ')
@@ -112,6 +112,7 @@ if input_instrument == 'AGILE' or input_instrument == 'ARCTIC' or input_instrume
     filter_eff,bandpass = filtLAM(filter_path+input_filter, wavelength)
 else:
     filter_eff = 1.0
+    bandpass = 1
 
 
 moonphase = input('Moon-Sun Angle Options:\n'+moonphase_list+'\nMoon Phase: ')
@@ -171,6 +172,7 @@ print('Tel_Collect_Area: ', Tel_Collect_Area)
 
 # filter_eff got called earlier.  Only called if imager is chosen.  Otherwise set to 1.0
 print('filter_eff: ', filter_eff)
+print('bandpass: ',bandpass)
 
 # background flux
 back_flux = total_background_flux(moonphase_path+moonphase, airmass, wavelength)
@@ -190,8 +192,8 @@ S_prime = GetSprime(bandpass, phot_flux, atmos_transmission, 1.0, inst_eff, filt
 print('Sprime is: ', S_prime*Tel_Collect_Area)
 
 # GetSprime(lambda_vals, phot_flux, atm_e, tel_e, inst_e, filt_e, det_e)
-B_prime = GetSprime(bandpass), back_flux, atmos_transmission, 1.0, inst_eff, filter_eff, 1.0) # tel_e = 1.0, det_e = 1.0
-print('Bprime is: ', B_prime*Tel_Collect_Area)
+B_prime = GetSprime(bandpass, back_flux, atmos_transmission, 1.0, inst_eff, filter_eff, 1.0) # tel_e = 1.0, det_e = 1.0
+print('Bprime is: ', B_prime)
 
 # Final exposure time result!
 Exposure_time = calc_expT(StoN, S_prime, B_prime, 1.0, Tel_Collect_Area) # calc_expT(SN,flux,back,seeing,tel)
