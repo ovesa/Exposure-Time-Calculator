@@ -47,7 +47,7 @@ atmos_transmission_path = 'Functions/atm_trans/'
 
 # print(atm_trans(0.55, 1.2))
 
-# EXAMPLES OF WORKING SHIT:
+# EXAMPLES OF WORKING STUFF:
 # print(getAGILE(np.arange(0.5, 0.8, 0.01), instrument_path+'AGILE.txt'))
 # print(getARCTIC(np.arange(0.5, 0.8, 0.01), instrument_path+'ARCTIC_CCD_QE.txt'))
 # print(getDIS(np.arange(0.5, 0.8, 0.01), instrument_path+'DIS_R300.txt', instrument_path+'DIS_red_E2V-CCD42-20-1-D21.txt'))
