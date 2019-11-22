@@ -96,7 +96,7 @@ input_magnitude = float(20)
 
 
 #input_StoN = input('Please enter S/N: ')
-StoN = float(178.51)
+StoN = float(186.)
 
 # input_wave_range = input('Enter wavelength range as beginning,end,wave_step_size (comma-separated): ')
 # input_wave_range = input_wave_range.split(',')
