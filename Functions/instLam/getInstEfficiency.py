@@ -1,36 +1,81 @@
 '''
-Instrument efficiency:
+This function returns a decimal value corresponding to the efficiency of the instrument at a given wavelenth.
 
-This function returns some decimal value corresponding to the efficiency of the instrument.
+----------------------------
+---------------------------- 
 
-    For AGILE, NICFPS, ARCTIC, and ARCES:
-        
-        Input parameters: wavelength, file_name
+AGILE
 
-        wavelength : float or float array.
+AGILE transmission does not require any telescope or CCD correction.
 
-        file_name : string for instrument efficiency textfile.
+----------------------------
+----------------------------  
 
+NICFPS
 
-        returns instrument efficiency for given wavelengths.
+Given: detector efficiencies only.  The rest are assumed to be unity.  
+Telescope correction must be performed for NICFPS in the parent function.
 
+NICFPS detector: The detector is a Rockwell Hawaii 1-RG 1024x1024 HgCdTe device with a 
+0.273 arsec/pixel scale and 4.58 arcmin sqaure, unvignetted field, and sensitivity from 0.85 to 2.4 microns.
 
+NICFPS Digitized using WebDigitizer: https://automeris.io/WebPlotDigitizer/
+https://www.eso.org/sci/facilities/lasilla/instruments/sofi/inst/HawaiiDetector.html
 
-    For DIS, and T-SPEC:
+The detector as tested by Rockwell demonstrates a mean quantum efficiency (QE) of 73.0% in J band and 81.9% in Ks band. 
+H-band QE is approximately mid-way between these values on the typical H1RG).
 
-        Input parameters: wavelength, file_name, additional_string
+----------------------------
+----------------------------
 
-        wavelength : float or float array.
+ARCTIC
 
-        file_name : string for instrument efficiency textfile.
+Given: CCD plot on ARCTIC page.  Other efficiencies set to unity.
+Telescope correction must be performed on ARCTIC.
+Digitized using: https://automeris.io/WebPlotDigitizer/
 
-        additional_string : path to detector efficiency (DIS), or other parameters (T-SPEC)
+----------------------------
+----------------------------
 
+ARCES
 
-        returns instrument efficiency for given wavelengths.
+TK2048E 2048x2048 pixel CCD
+QE Curve at :https://www.apo.nmsu.edu/arc35m/Instruments/SPICAM/spicamusersguide_contents.html
 
+Two cross-dispersion UBK7 prisms at 45deg (we do not know what the tranmission is)
 
+Diffraction grating: 31.6 grooves/mm, blaze angle b = 63.5 deg (nominal), or tan b = 2
+incident angle = 69.5 deg
 
+Grating throughput unknown.
+
+----------------------------
+----------------------------
+
+DIS
+
+Standard DIS III grating setup is either B400/R300 or B1200/R1200.
+
+These are the diffractions gratings which are still in use (whose plots were provided)
+
+Options: 5 gratings, 2 CCD's (red and blue)
+
+----------------------------
+----------------------------
+
+TRIPLE SPEC
+
+TripleSpec is a cross-dispersed near-infrared spectrograph that provides simultaneous continuous wavelength 
+coverage from 0.95-2.46um (0.95 - 2.460 um) in five spectral orders.
+
+The primary configuration of the instrument delivers a spectral resolution of R=3500 in a 1.1 arcsecond 
+slit at 2.1 pixels per slit on the spectrograph array. Slits with 0.7", 1.5", and 1.7" are also available.
+
+Gratings: all in same file.
+'Everything else' file are all efficiency sources other than gratings (detector, optics, etc.).
+
+----------------------------
+----------------------------
 '''
 
 import astropy as ap
@@ -45,11 +90,18 @@ angstrom_to_microns = 1E-4
 
 
 def getAGILE(lamda_inp, string_name_text_file):
-    '''
-    AGILE
-    
-    AGILE TRANSMISSION: DOES NOT REQUIRE ANY TELESCOPE OR CCD CORRECTION
-    Just return the value from getAGILE() given some wavelength.
+
+    '''   
+    Inputs: 
+
+        wavelength : float or float array.
+
+        file_name : string for instrument efficiency textfile.
+
+
+    output:
+        
+        Percent efficiency in decimal format at a given wavelenght or wavelength range.
     '''
 
     # Load AGILE data: Contains telescope torrection so this is all that needs to be done for AGILE other than
@@ -64,20 +116,18 @@ def getAGILE(lamda_inp, string_name_text_file):
 
 
 def getNICFPS(lamda_inp, string_name_text_file):
+    
     '''
-    NICFPS
-    
-    Given: detector efficiency only.  The rest are assumed to be unity.  
-    Telescope correction must be performed for NICFPS.
-    
-    NICFPS detector: The detector is a Rockwell Hawaii 1-RG 1024x1024 HgCdTe device with a 
-    0.273 arsec/pixel scale and 4.58 arcmin sqaure, unvignetted field, and sensitivity from 0.85 to 2.4 microns.
-    
-    NICFPS Digitized using WebDigitizer: https://automeris.io/WebPlotDigitizer/
-    https://www.eso.org/sci/facilities/lasilla/instruments/sofi/inst/HawaiiDetector.html
-    
-    The detector as tested by Rockwell demonstrates a mean quantum efficiency (QE) of 73.0% in J band and 81.9% in Ks band. 
-    H-band QE is approximately mid-way between these values on the typical H1RG.)
+    Inputs: 
+
+        wavelength : float or float array.
+
+        file_name : string for instrument efficiency textfile.
+
+
+    output:
+        
+        Percent efficiency in decimal format at a given wavelenght or wavelength range.
     '''
     
     # Load NICFPS data (in microns, um)
@@ -93,12 +143,18 @@ def getNICFPS(lamda_inp, string_name_text_file):
 
 
 def getARCTIC(lamda_inp, string_name_text_file):
-    '''
-    ARCTIC
-    
-    Given: CCD plot on ARCTIC page.  Other efficiencies set to unity.
-    Telescope correction must be performed on ARCTIC.
-    Digitized using: https://automeris.io/WebPlotDigitizer/
+
+    '''   
+    Inputs: 
+
+        wavelength : float or float array.
+
+        file_name : string for instrument efficiency textfile.
+
+
+    output:
+        
+        Percent efficiency in decimal format at a given wavelenght or wavelength range.
     '''
 
     # Load ARCTIC data (in nm)
@@ -113,19 +169,18 @@ def getARCTIC(lamda_inp, string_name_text_file):
 
 
 def getARCES(lamda_inp, string_name_text_file):
-    '''
-    ARCES
     
-    TK2048E 2048x2048 pixel CCD
-    QE Curve at :https://www.apo.nmsu.edu/arc35m/Instruments/SPICAM/spicamusersguide_contents.html
-    
-    Two cross-dispersion UBK7 prisms at 45deg (we do not know what the tranmission is)
-    
-    Diffraction grating: 31.6 grooves/mm, blaze angle b = 63.5 deg (nominal), or tan b = 2
-    incident angle = 69.5 deg
-    
-    We also do not know the throughput of the grating
-    
+    '''   
+    Inputs: 
+
+        wavelength : float or float array.
+
+        file_name : string for instrument efficiency textfile.
+
+
+    output:
+        
+        Percent efficiency in decimal format at a given wavelenght or wavelength range.
     '''
 
     # Load ARCES data (in nm)
@@ -140,15 +195,20 @@ def getARCES(lamda_inp, string_name_text_file):
 
 
 def getDIS(lamda_inp, string_name_text_file, ccd_string):
+    
     '''
-    DIS
-    
-    Standard DIS III grating setup is either B400/R300 or B1200/R1200.
-    
-    These are the diffractions gratings which are still in use (whose plots were provided)
-    
-    Options: 5 gratings, 2 CCD's (red and blue)
-    
+    Inputs:
+
+        wavelength : float or float array.
+
+        file_name : string for instrument efficiency textfile.
+
+        ccd_string : path to detector efficiencies for Red or Blue in DIS
+
+
+    output:
+        
+        Percent efficiency in decimal format at a given wavelenght or wavelength range.=
     '''
 
     # load DIS diffraction throughput:
@@ -171,17 +231,20 @@ def getDIS(lamda_inp, string_name_text_file, ccd_string):
 
 
 def getTSPEC(lamda_inp, string_name_text_file, ee_string):
+    
     '''
-    TRIPLE SPEC
-    
-    TripleSpec is a cross-dispersed near-infrared spectrograph that provides simultaneous continuous wavelength 
-    coverage from 0.95-2.46um (0.95 - 2.460 um) in five spectral orders.
-    
-    The primary configuration of the instrument delivers a spectral resolution of R=3500 in a 1.1 arcsecond 
-    slit at 2.1 pixels per slit on the spectrograph array. Slits with 0.7", 1.5", and 1.7" are also available.
-    
-    Gratings: all in same file.
-    Everything else: ...everything else! (detector, optics, etc.)
+    Inputs:
+
+        wavelength : float or float array.
+
+        file_name : string for instrument efficiency textfile.
+
+        ee_string : path to sources of efficiencies other than gratings.
+
+
+    output:
+        
+        Percent efficiency in decimal format at a given wavelenght or wavelength range.=
     '''
 
     # load TSPEC data in microns:
