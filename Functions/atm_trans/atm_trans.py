@@ -1,3 +1,7 @@
+import numpy as np
+from astropy.io import fits
+from scipy import interpolate
+
 def atm_trans(wl,airmass,path):
      '''
     Given wavelength and airmass, returns the atmospheric transmission
@@ -12,9 +16,6 @@ def atm_trans(wl,airmass,path):
     Output:
         trans_at_wl_am: An array of atmospheric transmission values at the given wavelengths and given airmass'''
         
-    import numpy as np
-    from astropy.io import fits
-    from scipy import interpolate
     
     #put wl in an array if a single value is entered
     
