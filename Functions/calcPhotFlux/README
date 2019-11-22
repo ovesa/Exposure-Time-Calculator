@@ -1,11 +1,13 @@
 Main Function: S = calcPhotFlux(mag_sys,band,mag)
+Description: This function takes in a magnitude and converts it into photon flux.
 Inputs: magnitude system ("AB" or "Vega"),
 band ("AB"-"u","g","r","i","z"; "Vega"-"U","B","V","R","I","J","H","K"), 
 and magnitude (e.g. 15)
+
 Outputs: S (Photon Flux) [photons/cm^2/s/um]
 
 Sub functions: 
-Flam, lam = ABFlux(band,mag) 
-Flam, lam = VegaFlux(band,mag)
+Flam, lam = ABFlux(band,mag) # convert AB mag to flux
+Flam, lam = VegaFlux(band,mag) # convert Vega mag to flux
 
 
