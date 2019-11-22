@@ -3,7 +3,9 @@ from astropy.io import fits
 from scipy import interpolate
 
 def atm_trans(wl,airmass,path):
-     '''
+    
+    '''
+    
     Given wavelength and airmass, returns the atmospheric transmission
     
     Input:
@@ -14,7 +16,9 @@ def atm_trans(wl,airmass,path):
         path: local path to skytable files which contain the atmospheric transmission information
         
     Output:
-        trans_at_wl_am: An array of atmospheric transmission values at the given wavelengths and given airmass'''
+        trans_at_wl_am: An array of atmospheric transmission values at the given wavelengths and given airmass
+        
+    '''
         
     
     #put wl in an array if a single value is entered
